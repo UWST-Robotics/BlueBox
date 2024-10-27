@@ -1,4 +1,4 @@
-import {List} from "@mui/material";
+import {Box, List} from "@mui/material";
 import useNetworkTableGroups from "../../../hooks/networkTable/useNetworkTableGroups.ts";
 import SceneGraphGroup from "./SceneGraphGroup.tsx";
 
@@ -6,16 +6,24 @@ export default function SceneGraph() {
     const [rootGroup] = useNetworkTableGroups();
 
     return (
-        <List
+        <Box
             sx={{
-                paddingLeft: 2,
-                paddingRight: 2
+                height: '100%',
+                width: '100%',
+                overflow: 'auto'
             }}
         >
-            <SceneGraphGroup
-                networkGroup={rootGroup}
-                isRoot
-            />
-        </List>
+            <List
+                sx={{
+                    paddingLeft: 2,
+                    paddingRight: 2
+                }}
+            >
+                <SceneGraphGroup
+                    networkGroup={rootGroup}
+                    isRoot
+                />
+            </List>
+        </Box>
     )
 }

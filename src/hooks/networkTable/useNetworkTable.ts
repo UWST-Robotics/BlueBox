@@ -9,6 +9,12 @@ export const networkTableAtom = atom<NetworkTableRecord[]>([
     {key: "group1/number2", value: 43},
     {key: "bool", value: true},
 
+    // Log
+    {key: "_log/1", value: "Hello, World!"},
+    {key: "_log/2", value: "Hello, World!"},
+    {key: "_log/3", value: "Hello, World!"},
+    {key: "_log/4", value: "Hello, World!"},
+
     // Hardware
     {key: "_hardware/Port 1/port", value: 1},
     {key: "_hardware/Port 1/name", value: "Flywheel Motor"},

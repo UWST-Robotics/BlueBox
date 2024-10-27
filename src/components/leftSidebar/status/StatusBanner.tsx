@@ -1,7 +1,19 @@
 import {Box} from "@mui/material";
 import {Circle} from '@mui/icons-material';
 
-export default function StatusBanner() {
+export interface StatusBannerProps {
+    type: string;
+    text: string;
+    color: "green" | "yellow" | "red";
+}
+
+const statusColorMap: Record<StatusBannerProps["color"], string> = {
+    green: "#44bb44",
+    yellow: "#bbbb44",
+    red: "#bb4444",
+}
+
+export default function StatusBanner(props: StatusBannerProps) {
     return (
         <Box
             sx={{
@@ -13,13 +25,13 @@ export default function StatusBanner() {
         >
             <Circle
                 sx={{
-                    color: '#44bb44',
+                    color: statusColorMap[props.color],
                     fontSize: 10,
                     marginRight: 1
                 }}
             />
-            <p>
-                <b>Status:</b> Connected
+            <p style={{margin: 5}}>
+                <b>{props.type}:</b> {props.text}
             </p>
         </Box>
     )

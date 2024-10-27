@@ -1,18 +1,38 @@
-import {Tab, Tabs} from "@mui/material";
+import {Paper, Tab, Tabs} from "@mui/material";
 import useCurrentTab from "../../hooks/navigation/currentTab.ts";
+import {Map, Notes, SettingsEthernet} from "@mui/icons-material";
 
 export default function Navbar() {
     const [tab, setTab] = useCurrentTab();
 
     return (
-        <Tabs
-            variant={"fullWidth"}
-            value={tab}
-            onChange={(_, value) => setTab(value)}
+        <Paper
+            elevation={2}
         >
-            <Tab value={"log"} label={"Log Output"}/>
-            <Tab value={"hardware"} label={"Hardware Status"}/>
-            <Tab value={"field"} label={"Field Map"}/>
-        </Tabs>
+            <Tabs
+                variant={"standard"}
+                value={tab}
+                onChange={(_, value) => setTab(value)}
+            >
+                <Tab
+                    value={"log"}
+                    label={"Log Output"}
+                    icon={<Notes/>}
+                    iconPosition={"start"}
+                />
+                <Tab
+                    value={"hardware"}
+                    label={"Hardware Status"}
+                    icon={<SettingsEthernet/>}
+                    iconPosition={"start"}
+                />
+                <Tab
+                    value={"field"}
+                    label={"Field Map"}
+                    icon={<Map/>}
+                    iconPosition={"start"}
+                />
+            </Tabs>
+        </Paper>
     )
 }

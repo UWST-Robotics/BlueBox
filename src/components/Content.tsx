@@ -1,7 +1,8 @@
 import LeftSidebar from "./leftSidebar/LeftSidebar.tsx";
-import {Box} from "@mui/material";
+import {Box, Paper} from "@mui/material";
 import Navbar from "./navbar/navbar.tsx";
 import HardwareStatusPage from "./hardwareStatus/HardwareStatusPage.tsx";
+import LogOutputPage from "./logOutput/LogOutputPage.tsx";
 
 export default function Content() {
     return (
@@ -14,7 +15,8 @@ export default function Content() {
             }}
         >
             <LeftSidebar/>
-            <Box
+            <Paper
+                elevation={0}
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -24,7 +26,8 @@ export default function Content() {
             >
                 <Navbar/>
                 <HardwareStatusPage/>
-            </Box>
+                <LogOutputPage/>
+            </Paper>
         </Box>
     )
 }
