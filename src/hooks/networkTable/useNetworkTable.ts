@@ -29,6 +29,13 @@ export const networkTableAtom = atom<NetworkTableRecord[]>([
     {key: "_hardware/Port 1/isDriverFault", value: true},
     {key: "_hardware/Port 1/isDriverOverCurrent", value: true},
     {key: "_hardware/eee/test", value: true},
+
+    // Pose
+    {key: "_poses/SillyRobot/x", value: 1},
+    {key: "_poses/SillyRobot/y", value: 2},
+    {key: "_poses/SillyRobot/angle", value: 45},
+    {key: "_poses/SillyRobot/length", value: 12},
+    {key: "_poses/SillyRobot/width", value: 12},
 ]);
 
 // Hooks

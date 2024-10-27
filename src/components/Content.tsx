@@ -3,6 +3,7 @@ import {Box, Paper} from "@mui/material";
 import Navbar from "./navbar/navbar.tsx";
 import HardwareStatusPage from "./hardwareStatus/HardwareStatusPage.tsx";
 import LogOutputPage from "./logOutput/LogOutputPage.tsx";
+import FieldCanvasPage from "./fieldCanvas/FieldCanvasPage.tsx";
 
 export default function Content() {
     return (
@@ -27,6 +28,7 @@ export default function Content() {
                 <Navbar/>
                 <HardwareStatusPage/>
                 <LogOutputPage/>
+                <FieldCanvasPage/>
             </Paper>
         </Box>
     )
