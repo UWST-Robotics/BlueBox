@@ -1,8 +1,8 @@
-import NetworkTableRecord from "./NetworkTableRecord.ts";
+import NetworkTableValue from "./NetworkTableValue.ts";
 
 export default interface NetworkTableGroup {
     path: string;
     name: string;
-    children: NetworkTableGroup[];
-    records: NetworkTableRecord[];
+    children: Record<string, NetworkTableGroup>;
+    records: Record<string, NetworkTableValue>;
 }

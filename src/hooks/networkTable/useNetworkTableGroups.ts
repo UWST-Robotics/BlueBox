@@ -2,13 +2,14 @@ import {atom, useAtom} from "jotai";
 import {networkTableAtom} from "./useNetworkTable.ts";
 import NetworkTableGroup from "../../types/NetworkTableGroup.ts";
 
+// Atoms
 export const networkTableGroupsAtom = atom((get) => {
     const networkTable = get(networkTableAtom);
     const rootGroup: NetworkTableGroup = {
         path: "",
         name: "",
-        records: [],
-        children: [],
+        children: {},
+        records: {},
     };
 
     // Iterate through records
@@ -16,7 +17,11 @@ export const networkTableGroupsAtom = atom((get) => {
 
         // Split key into keys
         const keys = record.key.split("/");
-        keys.pop(); // <-- Remove last key
+        const recordName = keys.pop(); // <-- Remove last key
+
+        // Skip if missing record key
+        if (recordName === undefined)
+            continue;
 
         // Track traversed groups
         let parentGroup = rootGroup;
@@ -29,17 +34,17 @@ export const networkTableGroupsAtom = atom((get) => {
             currentPath += `/${key}`;
 
             // Find existing group in parent's children
-            let group = parentGroup.children.find((group) => group.name === key);
+            let group = parentGroup.children[key];
 
             // Create group if it doesn't exist
             if (!group) {
                 group = {
                     path: currentPath,
                     name: key,
-                    children: [],
-                    records: []
+                    children: {},
+                    records: {}
                 };
-                parentGroup.children.push(group);
+                parentGroup.children[key] = group;
             }
 
             // Update last group
@@ -47,12 +52,13 @@ export const networkTableGroupsAtom = atom((get) => {
         }
 
         // Add record to last group
-        parentGroup?.records.push(record);
+        parentGroup.records[recordName] = record.value;
     }
 
     return rootGroup;
 });
 
+// Hooks
 export default function useNetworkTableGroups() {
     return useAtom(networkTableGroupsAtom);
 }

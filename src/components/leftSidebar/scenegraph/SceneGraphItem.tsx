@@ -1,17 +1,18 @@
 import {ListItemButton, ListItemText} from "@mui/material";
-import NetworkTableRecord from "../../../types/NetworkTableRecord.ts";
 import ColoredListItem from "../../common/ColoredListItem.tsx";
+import NetworkTableValue from "../../../types/NetworkTableValue.ts";
 
 export interface SceneGraphItemProps {
-    networkRecord: NetworkTableRecord;
+    name: string;
+    value: NetworkTableValue;
     depth?: number;
 }
 
 export default function SceneGraphItem(props: SceneGraphItemProps) {
-    const {networkRecord} = props;
+    const {name, value} = props;
 
-    const recordName = networkRecord.key.split("/").pop();
-    const recordValue = String(networkRecord.value);
+
+    const valueText = String(value);
     const depth = props.depth || 0;
 
     return (
@@ -21,7 +22,7 @@ export default function SceneGraphItem(props: SceneGraphItemProps) {
 
             secondaryAction={(
                 <ListItemText
-                    secondary={recordValue}
+                    secondary={valueText}
                 />
             )}
         >
@@ -34,7 +35,7 @@ export default function SceneGraphItem(props: SceneGraphItemProps) {
                 }}
             >
                 <ListItemText
-                    primary={recordName}
+                    primary={name}
                 />
             </ListItemButton>
         </ColoredListItem>

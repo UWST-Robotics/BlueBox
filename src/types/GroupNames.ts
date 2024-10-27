@@ -1,0 +1,1 @@
+export const HARDWARE_INFO_GROUP = "_hardware";

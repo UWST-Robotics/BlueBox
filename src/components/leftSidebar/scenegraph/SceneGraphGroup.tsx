@@ -8,17 +8,19 @@ import ColoredListItem from "../../common/ColoredListItem.tsx";
 export interface SceneGraphGroupProps {
     networkGroup: NetworkTableGroup;
     depth?: number;
-    hideRoot?: boolean;
+    isRoot?: boolean;
 }
 
 export default function SceneGraphGroup(props: SceneGraphGroupProps) {
-    const [isCollapsed, setIsCollapsed] = React.useState(false);
+    const [isCollapsed, setIsCollapsed] = React.useState(!props.isRoot);
 
+    const recordKeys = Object.keys(props.networkGroup.records);
+    const childrenKeys = Object.keys(props.networkGroup.children);
     const depth = props.depth || 0;
 
     return (
         <>
-            {!props.hideRoot && (
+            {!props.isRoot && (
                 <ColoredListItem
                     disablePadding
                     intent="primary"
@@ -45,18 +47,19 @@ export default function SceneGraphGroup(props: SceneGraphGroupProps) {
 
             <Collapse in={!isCollapsed} timeout="auto" unmountOnExit>
                 <List disablePadding>
-                    {props.networkGroup.children.map((child) => (
+                    {childrenKeys.map((childKey) => (
                         <SceneGraphGroup
-                            key={child.path}
-                            networkGroup={child}
+                            key={childKey}
+                            networkGroup={props.networkGroup.children[childKey]}
                             depth={depth + 1}
                         />
                     ))}
-                    {props.networkGroup.records.map((record) => (
+                    {recordKeys.map((recordKey) => (
                         <SceneGraphItem
-                            key={record.key}
-                            networkRecord={record}
+                            key={recordKey}
                             depth={depth + 1}
+                            name={recordKey}
+                            value={props.networkGroup.records[recordKey]}
                         />
                     ))}
                 </List>

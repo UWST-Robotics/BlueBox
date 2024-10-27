@@ -14,7 +14,7 @@ export default function SceneGraph() {
         >
             <SceneGraphGroup
                 networkGroup={rootGroup}
-                hideRoot
+                isRoot
             />
         </List>
     )

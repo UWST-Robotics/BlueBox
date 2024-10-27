@@ -1,4 +1,4 @@
-export type NetworkTableValue = string | number | boolean;
+import NetworkTableValue from "./NetworkTableValue.ts";
 
 export default interface NetworkTableRecord {
     key: string;

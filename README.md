@@ -5,12 +5,14 @@ BlueBox 🟦
 </h1>
 
 <p align="center">
-
-In order to test autonomous routines on mobile robotic systems, receiving feedback during runtime is extremely important. BlueBox is an app designed to be installed on an SBC such as a [Raspberry Pi](https://www.raspberrypi.com/) to relay and present debug data from a serial port (such as a VEX V5 brain) to a developer over Wi-Fi.
-
-<img alt="VEX Brain connects to Raspberry Pi over USB then to PC over WiFi" src="https://i.imgur.com/QXTK3qu.png">
-
+In order to test autonomous routines on mobile robotic systems, receiving feedback during runtime is extremely important. BlueBox is an app designed to be installed on an SBC such as a Raspberry Pi to relay and present debug data from a serial port (such as a VEX V5 brain) to a developer over Wi-Fi.
 </p>
+
+<p align="center">
+<img alt="VEX Brain connects to Raspberry Pi over USB then to PC over WiFi" src="https://i.imgur.com/QXTK3qu.png">
+</p>
+
+
 
 ## Features
 
