@@ -4,18 +4,40 @@ import {DelimiterParser} from "@serialport/parser-delimiter";
 import NetworkTable from "../NetworkTable";
 import SocketCommunication from "./SocketCommunication";
 import Chalk from "chalk";
+import Heartbeat from "../common/Heartbeat";
 
 export default class SerialCommunication {
     static COM_PORT = "COM9";
+    static HEARTBEAT_PATH = "_robot/status";
+    static HEARTBEAT_INTERVAL = 1000;
+
     static port = new SerialPort({
-        path: SerialCommunication.COM_PORT,
+        path: this.COM_PORT,
         baudRate: 9600,
         autoOpen: false
     });
-
+    static heartbeat = new Heartbeat(this.HEARTBEAT_INTERVAL, this.onMissedHeartbeat);
     static parser = SerialCommunication.port.pipe(new DelimiterParser({delimiter: "\x0d"}));
 
     static connect() {
+
+        // Set NetworkTable values
+        this.onMissedHeartbeat();
+
+        // Handle Errors
+        SerialCommunication.port.on("error", (error) => {
+            Logger.error(`Serial port error: ${error.message}`);
+        });
+
+        // Loopback data
+        SerialCommunication.port.on("data", (data) => {
+            SerialCommunication.port.write(data);
+        });
+
+        // Handle incoming data
+        SerialCommunication.parser.on("data", SerialCommunication.onData);
+
+        // Open the serial port
         SerialCommunication.port.open((error) => {
             if (error) {
                 Logger.error(`Error opening serial port: ${error.message}`);
@@ -23,8 +45,6 @@ export default class SerialCommunication {
                 Logger.info(`Connected to port ${SerialCommunication.COM_PORT}`);
             }
         });
-
-        SerialCommunication.parser.on("data", SerialCommunication.onData);
     }
 
     static onData(_data: unknown) {
@@ -35,7 +55,9 @@ export default class SerialCommunication {
 
             // Update Value
             if (data.startsWith("UPDATE")) {
-                const [, key, value] = data.split(" ");
+                const [, key] = data.split(" ");
+                const value = data.split(" ").slice(2).join(" ");
+
                 // Update the network table
                 const record = {key, value};
                 NetworkTable.addOrUpdate(record);
@@ -63,6 +85,17 @@ export default class SerialCommunication {
                 SocketCommunication.emitLog(message);
             }
 
+            // Heartbeat
+            else if (data.startsWith("HEARTBEAT")) {
+                // Reset the heartbeat
+                SerialCommunication.heartbeat.beat();
+
+                // Update the network table
+                const record = {key: SerialCommunication.HEARTBEAT_PATH, value: "online"};
+                NetworkTable.addOrUpdate(record);
+                SocketCommunication.emitUpdateRecord(record);
+            }
+
             // Unknown Command
             else {
                 Logger.error(`Unknown command: ${data}`);
@@ -70,5 +103,12 @@ export default class SerialCommunication {
         } catch (error) {
             Logger.error(`Error parsing data: ${error.message}`);
         }
+    }
+
+    static onMissedHeartbeat() {
+        // Update the network table
+        const record = {key: SerialCommunication.HEARTBEAT_PATH, value: "offline"};
+        NetworkTable.addOrUpdate(record);
+        SocketCommunication.emitUpdateRecord(record);
     }
 }
