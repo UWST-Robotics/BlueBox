@@ -3,6 +3,7 @@ import {ThemeProvider} from "@mui/material";
 import {createTheme} from "@mui/material/styles";
 import {Provider as StateProvider} from "jotai";
 import primaryStore from "../hooks/primaryStore.ts";
+import useSocketConnection from "../hooks/socket/useConnectSocket.ts";
 
 // MUI theme
 const darkTheme = createTheme({
@@ -21,6 +22,8 @@ const darkTheme = createTheme({
 
 // App Provider Stack
 function App() {
+    useSocketConnection();
+
     return (
         <StateProvider store={primaryStore}>
             <ThemeProvider theme={darkTheme}>

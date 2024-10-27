@@ -41,7 +41,7 @@ export default function HardwareStatusCard(props: HardwareStatusCardProps) {
                         icon={<Speed/>}
                         name={"Velocity"}
                         value={hardwareGroup.records["velocity"]}
-                        suffix="RPM"
+                        suffix=" RPM"
                     />
                     <HardwareStatusProperty
                         icon={<Refresh/>}
