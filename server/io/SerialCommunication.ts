@@ -19,6 +19,15 @@ export default class SerialCommunication {
     static heartbeat = new Heartbeat(this.HEARTBEAT_INTERVAL, this.onMissedHeartbeat);
     static parser = SerialCommunication.port.pipe(new DelimiterParser({delimiter: "\x0d"}));
 
+    static listPorts() {
+        SerialPort.list().then((ports) => {
+            Logger.info("Available Ports:");
+            ports.forEach((port) => {
+                Logger.info(`- ${port.path}`);
+            });
+        });
+    }
+
     static connect() {
 
         // Set NetworkTable values
