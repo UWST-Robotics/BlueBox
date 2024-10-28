@@ -4,6 +4,7 @@ import useSocketStatus from "../../../hooks/socket/useSocketStatus.ts";
 import useNetworkTableGroup from "../../../hooks/networkTable/useNetworkTableGroup.ts";
 import {ROBOT_GROUP} from "../../../types/GroupNames.ts";
 import BatteryIndicator from "./BatteryIndicator.tsx";
+import SerialIndicator from "./SerialIndicator.tsx";
 
 export default function StatusHeader() {
     const socketStatus = useSocketStatus();
@@ -48,6 +49,8 @@ export default function StatusHeader() {
                 current={Number(batteryCurrent)}
                 temperature={Number(batteryTemperature)}
             />
+
+            <SerialIndicator/>
 
         </Box>
     )

@@ -82,7 +82,7 @@ export default function PoseRenderer(props: PoseRendererProps) {
             {/* Angle */}
             {angle !== undefined && (
                 <Line
-                    points={[0, 0, actualLength, 0]}
+                    points={[0, 0, actualLength * 0.8, 0]}
                     stroke={strokeColor ?? STROKE_COLOR}
                     strokeWidth={1}
                 />

@@ -1,4 +1,4 @@
 export default interface LogEntry {
-    timestamp: number;
+    timestamp: Date;
     message: string;
 }

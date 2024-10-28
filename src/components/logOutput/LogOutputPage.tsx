@@ -1,7 +1,8 @@
 import useCurrentTab from "../../hooks/navigation/currentTab.ts";
-import {Box, Paper, Typography} from "@mui/material";
+import {Box} from "@mui/material";
 import useLog from "../../hooks/log/useLog.ts";
 import React from "react";
+import {Markup} from "interweave";
 
 export default function LogOutputPage() {
     const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -35,20 +36,21 @@ export default function LogOutputPage() {
                 );
             }}
         >
-            <Paper
+            <Box
                 sx={{
-                    padding: 2
+                    padding: 2,
+                    backgroundColor: "black",
+                    fontFamily: "'Lucida Console', Monaco, monospace",
                 }}
             >
                 {logEntries?.map((logEntry, index) => (
-                    <Typography
+                    <Markup
                         key={index}
-                        variant="body1"
-                    >
-                        {logEntry.message}
-                    </Typography>
+                        content={logEntry.message}
+                        tagName="div"
+                    />
                 ))}
-            </Paper>
+            </Box>
         </Box>
     );
 }

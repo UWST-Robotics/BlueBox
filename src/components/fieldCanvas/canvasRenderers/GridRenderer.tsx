@@ -43,6 +43,18 @@ export default function GridRenderer(props: GridRendererProps) {
                     strokeWidth={strokeWidth ?? STROKE_WIDTH}
                 />
             ))}
+
+            {/* Center lines */}
+            <Line
+                points={[canvasSize / 2, 0, canvasSize / 2, canvasSize]}
+                stroke={"#600"}
+                strokeWidth={strokeWidth ?? STROKE_WIDTH}
+            />
+            <Line
+                points={[0, canvasSize / 2, canvasSize, canvasSize / 2]}
+                stroke={"#006"}
+                strokeWidth={strokeWidth ?? STROKE_WIDTH}
+            />
         </Group>
     )
 }

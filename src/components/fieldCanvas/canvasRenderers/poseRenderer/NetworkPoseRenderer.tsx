@@ -1,6 +1,6 @@
-import NetworkTableGroup from "../../../types/NetworkTableGroup.ts";
+import NetworkTableGroup from "../../../../types/NetworkTableGroup.ts";
 import PoseRenderer from "./PoseRenderer.tsx";
-import parseNetworkValueToNumber from "../../../utils/parseNetworkValueToNumber.ts";
+import parseNetworkValueToNumber from "../../../../utils/parseNetworkValueToNumber.ts";
 
 export interface NetworkPoseRendererProps {
     poseGroup: NetworkTableGroup;
@@ -10,6 +10,7 @@ export default function NetworkPoseRenderer(props: NetworkPoseRendererProps) {
     const {poseGroup} = props;
 
     const name = poseGroup.records["name"];
+    const color = poseGroup.records["color"];
     const x = parseNetworkValueToNumber(poseGroup.records["x"]);
     const y = parseNetworkValueToNumber(poseGroup.records["y"]);
     const angle = parseNetworkValueToNumber(poseGroup.records["angle"]);
@@ -18,7 +19,8 @@ export default function NetworkPoseRenderer(props: NetworkPoseRendererProps) {
 
     return (
         <PoseRenderer
-            label={name ? name.toString() : poseGroup.name}
+            label={name?.toString() ?? poseGroup.name}
+            strokeColor={color?.toString()}
             x={x ?? 0}
             y={y ?? 0}
             angle={angle}

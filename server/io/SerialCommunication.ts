@@ -5,62 +5,85 @@ import NetworkTable from "../NetworkTable";
 import SocketCommunication from "./SocketCommunication";
 import Chalk from "chalk";
 import Heartbeat from "../common/Heartbeat";
+import SerialPortType from "../types/SerialPortInfo";
 
 export default class SerialCommunication {
-    static COM_PORT = "COM9";
     static HEARTBEAT_PATH = "_robot/status";
     static HEARTBEAT_INTERVAL = 1000;
 
-    static port = new SerialPort({
-        path: this.COM_PORT,
-        baudRate: 9600,
-        autoOpen: false
-    });
-    static heartbeat = new Heartbeat(this.HEARTBEAT_INTERVAL, this.onMissedHeartbeat);
-    static parser = SerialCommunication.port.pipe(new DelimiterParser({delimiter: "\x0d"}));
+    serialPort: SerialPort;
+    heartbeat: Heartbeat;
+    parser: DelimiterParser;
 
-    static listPorts() {
-        SerialPort.list().then((ports) => {
-            Logger.info("Available Ports:");
-            ports.forEach((port) => {
-                Logger.info(`- ${port.path}`);
-            });
+    constructor(serialPath: string) {
+
+        // Create Serial Port
+        this.serialPort = new SerialPort({
+            path: serialPath,
+            baudRate: 9600
         });
-    }
 
-    static connect() {
+        // Create Child Processes
+        this.heartbeat = new Heartbeat(SerialCommunication.HEARTBEAT_INTERVAL, this.onMissedHeartbeat);
+        this.parser = this.serialPort.pipe(new DelimiterParser({delimiter: "\x0d"}));
 
-        // Set NetworkTable values
-        this.onMissedHeartbeat();
+        // Handle Open
+        this.serialPort.on("open", () => {
+            Logger.info("Serial port opened on " + this.serialPort.path);
+        });
 
         // Handle Errors
-        SerialCommunication.port.on("error", (error) => {
+        this.serialPort.on("error", (error) => {
             Logger.error(`Serial port error: ${error.message}`);
         });
 
         // Loopback data
-        SerialCommunication.port.on("data", (data) => {
-            SerialCommunication.port.write(data);
-        });
+        // this.serialPort.on("data", (data) => {
+        //     serialPort.write(data);
+        // });
 
         // Handle incoming data
-        SerialCommunication.parser.on("data", SerialCommunication.onData);
+        this.parser.on("data", this.onData.bind(this));
+    }
 
-        // Open the serial port
-        SerialCommunication.port.open((error) => {
-            if (error) {
-                Logger.error(`Error opening serial port: ${error.message}`);
-            } else {
-                Logger.info(`Connected to port ${SerialCommunication.COM_PORT}`);
-            }
+    /**
+     * Close the serial port
+     */
+    close() {
+        if (this.serialPort.isOpen)
+            this.serialPort.close();
+    }
+
+    /**
+     * Get all available serial ports
+     * @returns {Promise<SerialPortType[]>}
+     */
+    async getAllPorts() {
+        return new Promise<SerialPortType[]>((resolve) => {
+            SerialPort.list().then((ports) => {
+                resolve(ports.map((port) => ({
+                    isActive: port.path === this.serialPort.path,
+                    path: port.path,
+                    manufacturer: port.manufacturer,
+                    serialNumber: port.serialNumber,
+                    pnpID: port.pnpId,
+                    locationID: port.locationId,
+                    productID: port.productId,
+                    vendorID: port.vendorId
+                })));
+            });
         });
     }
 
-    static onData(_data: unknown) {
+    /**
+     * Handle incoming data
+     * @param _data
+     */
+    private onData(_data: unknown) {
         try {
             // Parse Data
             const data = _data.toString().trim();
-            Logger.data(data);
+            Logger.client(`Received data: ${data}`);
 
             // Update Value
             if (data.startsWith("UPDATE")) {
@@ -90,14 +113,14 @@ export default class SerialCommunication {
             // Log Message
             else if (data.startsWith("LOG")) {
                 const message = data.split(" ").slice(1).join(" ");
-                Logger.log(Chalk.blueBright('[LOG]'), message);
+                Logger.client(`Received log: ${Chalk.yellow(message)}`);
                 SocketCommunication.emitLog(message);
             }
 
             // Heartbeat
             else if (data.startsWith("HEARTBEAT")) {
                 // Reset the heartbeat
-                SerialCommunication.heartbeat.beat();
+                this.heartbeat.beat();
 
                 // Update the network table
                 const record = {key: SerialCommunication.HEARTBEAT_PATH, value: "online"};
@@ -114,7 +137,7 @@ export default class SerialCommunication {
         }
     }
 
-    static onMissedHeartbeat() {
+    private onMissedHeartbeat() {
         // Update the network table
         const record = {key: SerialCommunication.HEARTBEAT_PATH, value: "offline"};
         NetworkTable.addOrUpdate(record);

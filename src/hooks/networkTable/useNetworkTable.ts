@@ -9,12 +9,6 @@ export const networkTableAtom = atom<NetworkTableRecord[]>([
     {key: "group1/number2", value: 43},
     {key: "bool", value: true},
 
-    // Log
-    {key: "_log/1", value: "Hello, World!"},
-    {key: "_log/2", value: "Hello, World!"},
-    {key: "_log/3", value: "Hello, World!"},
-    {key: "_log/4", value: "Hello, World!"},
-
     // Hardware
     {key: "_hardware/Port 1/port", value: 1},
     {key: "_hardware/Port 1/name", value: "Flywheel Motor"},
@@ -31,11 +25,32 @@ export const networkTableAtom = atom<NetworkTableRecord[]>([
     {key: "_hardware/eee/test", value: true},
 
     // Pose
-    {key: "_poses/SillyRobot/x", value: 1},
-    {key: "_poses/SillyRobot/y", value: 2},
-    {key: "_poses/SillyRobot/angle", value: 45},
-    {key: "_poses/SillyRobot/length", value: 12},
-    {key: "_poses/SillyRobot/width", value: 12},
+    {key: "_poses/SillyRobot/x", value: 53},
+    {key: "_poses/SillyRobot/y", value: -35},
+    {key: "_poses/SillyRobot/angle", value: -60},
+    {key: "_poses/SillyRobot/length", value: 18},
+    {key: "_poses/SillyRobot/width", value: 18},
+    {key: "_poses/SillyRobot/color", value: "#aa2222"},
+
+    // Field
+    {key: "_lines/ladder/color", value: "#a0a109"},
+    {key: "_lines/ladder/1/x", value: 24},
+    {key: "_lines/ladder/1/y", value: 0},
+    {key: "_lines/ladder/2/x", value: 0},
+    {key: "_lines/ladder/2/y", value: -24},
+    {key: "_lines/ladder/3/x", value: -24},
+    {key: "_lines/ladder/3/y", value: 0},
+    {key: "_lines/ladder/4/x", value: 0},
+    {key: "_lines/ladder/4/y", value: 24},
+    {key: "_lines/ladder/5/x", value: 24},
+    {key: "_lines/ladder/5/y", value: 0},
+
+
+    // Robot
+    // {key: "_robot/batteryVoltage", value: 12.5},
+    // {key: "_robot/batteryCurrent", value: 0},
+    // {key: "_robot/batteryTemperature", value: 69},
+
 ]);
 
 // Hooks
