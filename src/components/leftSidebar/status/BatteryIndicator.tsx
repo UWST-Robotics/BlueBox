@@ -18,7 +18,7 @@ export interface BatteryIndicatorProps {
 }
 
 const MAX_VOLTAGE = 13500
-const MIN_VOLTAGE = 12500;
+const MIN_VOLTAGE = 11000;
 
 export default function BatteryIndicator(props: BatteryIndicatorProps) {
     const {voltage, current, temperature} = props;

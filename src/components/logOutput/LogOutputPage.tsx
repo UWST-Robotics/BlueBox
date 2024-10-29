@@ -20,7 +20,7 @@ export default function LogOutputPage() {
         }
     }, [logEntries, isPinnedToBottom]);
 
-    console.log(logEntries);
+    logEntries.forEach((logEntry) => console.log(ansiToHtml(logEntry.message)));
 
     if (currentTab !== "log")
         return null;
@@ -44,6 +44,7 @@ export default function LogOutputPage() {
                     padding: 2,
                     backgroundColor: "black",
                     fontFamily: "'Lucida Console', Monaco, monospace",
+                    whiteSpace: "pre"
                 }}
             >
                 {logEntries?.map((logEntry, index) => (

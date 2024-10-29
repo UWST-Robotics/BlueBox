@@ -2,15 +2,17 @@ import StatusBanner from "./StatusBanner.tsx";
 import {Box} from "@mui/material";
 import useSocketStatus from "../../../hooks/socket/useSocketStatus.ts";
 import useNetworkTableGroup from "../../../hooks/networkTable/useNetworkTableGroup.ts";
-import {ROBOT_GROUP} from "../../../types/GroupNames.ts";
+import {ROBOT_GROUP, SERVER_GROUP} from "../../../types/GroupNames.ts";
 import BatteryIndicator from "./BatteryIndicator.tsx";
 import SerialIndicator from "./SerialIndicator.tsx";
 
 export default function StatusHeader() {
     const socketStatus = useSocketStatus();
     const robotGroup = useNetworkTableGroup(ROBOT_GROUP);
+    const serverGroup = useNetworkTableGroup(SERVER_GROUP);
 
-    const robotStatus = robotGroup?.records["status"] ?? "Unknown";
+    const serialStatus = serverGroup?.records["serialStatus"] ?? "Unknown";
+    const robotStatus = serverGroup?.records["heartbeat"] ?? "Unknown";
     const batteryVoltage = robotGroup?.records["batteryVoltage"];
     const batteryCurrent = robotGroup?.records["batteryCurrent"];
     const batteryTemperature = robotGroup?.records["batteryTemperature"];
@@ -23,17 +25,24 @@ export default function StatusHeader() {
             }}
         >
             <StatusBanner
-                type={"BlueBox"}
+                type={"Socket"}
                 text={socketStatus === "connected" ? "Connected" : "Disconnected"}
                 color={socketStatus === "connected" ? "green" : "red"}
             />
 
             {socketStatus === "connected" && (
-                <StatusBanner
-                    type={"Robot"}
-                    text={robotStatus === "online" ? "Online" : "Offline"}
-                    color={robotStatus === "online" ? "green" : "red"}
-                />
+                <>
+                    <StatusBanner
+                        type={"Serial"}
+                        text={serialStatus === "open" ? "Open" : "Closed"}
+                        color={serialStatus === "open" ? "green" : "red"}
+                    />
+                    <StatusBanner
+                        type={"Robot"}
+                        text={robotStatus === "online" ? "Enabled" : "Disabled"}
+                        color={robotStatus === "online" ? "green" : "red"}
+                    />
+                </>
             )}
 
             {socketStatus !== "connected" && (

@@ -60,7 +60,9 @@ export default function useSocketConnection() {
 
         socket.on("resetTable", () => {
             console.log("Server requested table reset");
-            primaryStore.set(networkTableAtom, []);
+            primaryStore.set(networkTableAtom, (prev) => {
+                return prev.filter((r) => r.key.startsWith("_server/"));
+            });
         });
 
         socket.on("serialPorts", (ports: SerialPortInfo[]) => {

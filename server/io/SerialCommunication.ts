@@ -7,8 +7,7 @@ import Heartbeat from "../common/Heartbeat";
 import SerialPortType from "../types/SerialPortInfo";
 
 export default class SerialCommunication {
-    static HEARTBEAT_PATH = "_robot/status";
-    static HEARTBEAT_INTERVAL = 1000;
+    static HEARTBEAT_INTERVAL = 500;
 
     serialPort: SerialPort;
     heartbeat: Heartbeat;
@@ -23,7 +22,10 @@ export default class SerialCommunication {
         });
 
         // Create Child Processes
-        this.heartbeat = new Heartbeat(SerialCommunication.HEARTBEAT_INTERVAL, this.onMissedHeartbeat);
+        this.heartbeat = new Heartbeat(SerialCommunication.HEARTBEAT_INTERVAL, () => {
+            SerialCommunication.updateNetworkTable("heartbeat", "offline");
+        });
+
 
         // Wait for "sout" delimiter
         this.parserA = this.serialPort.pipe(new DelimiterParser({delimiter: "sout"}));
@@ -45,6 +47,7 @@ export default class SerialCommunication {
         // Handle Open
         this.serialPort.on("open", () => {
             Logger.info("Serial port opened on " + this.serialPort.path);
+            SerialCommunication.updateNetworkTable("serialStatus", "open");
         });
 
         // Handle Errors
@@ -52,11 +55,25 @@ export default class SerialCommunication {
             Logger.error(`Serial port error: ${error.message}`);
         });
 
-        // Loopback data
-        // this.serialPort.on("data", (data) => {
-        //     console.log(data);
-        //     console.log(data.toString());
-        // });
+        // Handle Close
+        this.serialPort.on("close", () => {
+            Logger.info("Serial port closed");
+            SerialCommunication.updateNetworkTable("serialStatus", "closed");
+        });
+    }
+
+    /**
+     * Update the status of a value in the network table
+     * @param key - The key of the value to update
+     * @param value - The new value
+     */
+    static updateNetworkTable(key: string, value: string) {
+        const record = {
+            key: `_server/${key}`,
+            value
+        };
+        NetworkTable.addOrUpdate(record);
+        SocketCommunication.emitUpdateRecord(record);
     }
 
     /**
@@ -128,9 +145,7 @@ export default class SerialCommunication {
                 this.heartbeat.beat();
 
                 // Update the network table
-                const record = {key: SerialCommunication.HEARTBEAT_PATH, value: "online"};
-                NetworkTable.addOrUpdate(record);
-                SocketCommunication.emitUpdateRecord(record);
+                SerialCommunication.updateNetworkTable("heartbeat", "online");
             }
 
             // Normal Log
@@ -140,12 +155,5 @@ export default class SerialCommunication {
         } catch (error) {
             Logger.error(`Error parsing data: ${error.message}`);
         }
-    }
-
-    private onMissedHeartbeat() {
-        // Update the network table
-        const record = {key: SerialCommunication.HEARTBEAT_PATH, value: "offline"};
-        NetworkTable.addOrUpdate(record);
-        SocketCommunication.emitUpdateRecord(record);
     }
 }

@@ -10,7 +10,7 @@ export default function LeftSidebar() {
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100vh',
-                width: 300
+                minWidth: 300
             }}
         >
             <StatusHeader/>
