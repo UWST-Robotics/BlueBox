@@ -1,7 +1,7 @@
 import NetworkTableGroup from "../../types/NetworkTableGroup.ts";
 import {Card, CardContent, List, Typography} from "@mui/material";
 import HardwareStatusProperty from "./HardwareStatusProperty.tsx";
-import {Bolt, Refresh, Speed, Thermostat} from "@mui/icons-material";
+import {Bolt, Expand, Explore, Palette, Refresh, Rotate90DegreesCw, Speed, Thermostat} from "@mui/icons-material";
 import HardwareStatusAlert from "./HardwareStatusAlert.tsx";
 
 export interface HardwareStatusCardProps {
@@ -61,23 +61,98 @@ export default function HardwareStatusCard(props: HardwareStatusCardProps) {
                         value={hardwareGroup.records["voltage"]}
                         suffix="mV"
                     />
+
+                    <HardwareStatusProperty
+                        icon={<Explore/>}
+                        name={"Heading"}
+                        value={hardwareGroup.records["heading"]}
+                        suffix="°"
+                    />
+                    <HardwareStatusProperty
+                        icon={<Rotate90DegreesCw/>}
+                        name={"Pitch"}
+                        value={hardwareGroup.records["pitch"]}
+                        suffix="°"
+                    />
+                    <HardwareStatusProperty
+                        icon={<Rotate90DegreesCw/>}
+                        name={"Roll"}
+                        value={hardwareGroup.records["roll"]}
+                        suffix="°"
+                    />
+                    <HardwareStatusProperty
+                        icon={<Rotate90DegreesCw/>}
+                        name={"Yaw"}
+                        value={hardwareGroup.records["yaw"]}
+                        suffix="°"
+                    />
+                    <HardwareStatusProperty
+                        icon={<Speed/>}
+                        name={"Acceleration"}
+                        value={hardwareGroup.records["accel"]}
+                        suffix=" m/s²"
+                    />
+
+                    <HardwareStatusProperty
+                        icon={<Expand/>}
+                        name={"Proximity"}
+                        value={hardwareGroup.records["proximity"]}
+                        suffix="%"
+                    />
+                    <HardwareStatusProperty
+                        icon={<Palette/>}
+                        name={"Hue"}
+                        value={hardwareGroup.records["colorHue"]}
+                    />
+                    <HardwareStatusProperty
+                        icon={<Palette/>}
+                        name={"Saturation"}
+                        value={hardwareGroup.records["colorSaturation"]}
+                        suffix={"%"}
+                    />
+                    <HardwareStatusProperty
+                        icon={<Palette/>}
+                        name={"Brightness"}
+                        value={hardwareGroup.records["colorBrightness"]}
+                        suffix={"%"}
+                    />
+
+                    <HardwareStatusProperty
+                        icon={<Expand/>}
+                        name={"Extended"}
+                        value={hardwareGroup.records["isExtended"]}
+                    />
                 </List>
 
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isOverTemp"]}
+                    isActive={hardwareGroup.records["isOverTemp"] === "1"}
                     text="Over temperature limit"
                 />
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isOverCurrent"]}
+                    isActive={hardwareGroup.records["isOverCurrent"] === "1"}
                     text="Over current limit"
                 />
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isDriverFault"]}
-                    text="Motor h-bridge driver fault"
+                    isActive={hardwareGroup.records["isDriverFault"] === "1"}
+                    text="H-bridge driver fault"
                 />
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isDriverOverCurrent"]}
-                    text="Motor h-bridge over current"
+                    isActive={hardwareGroup.records["isDriverOverCurrent"] === "1"}
+                    text="H-bridge over current"
+                />
+                <HardwareStatusAlert
+                    isActive={hardwareGroup.records["isErrored"] === "1"}
+                    text="Unknown error"
+                />
+                <HardwareStatusAlert
+                    isActive={hardwareGroup.records["isConnected"] === "0"}
+                    text="Device disconnected"
+                />
+
+                <HardwareStatusAlert
+                    isActive={hardwareGroup.records["isCalibrating"] === "1"}
+                    text="Currently calibrating..."
+                    severity={"info"}
                 />
             </CardContent>
         </Card>

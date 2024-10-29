@@ -20,7 +20,8 @@ export default function HardwareStatusPage() {
                 display: "flex",
                 flexWrap: "wrap",
                 gap: 2,
-                padding: 2
+                padding: 2,
+                overflowY: "auto"
             }}
         >
             {hardwareChildKeys.map((key) => (

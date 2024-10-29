@@ -18,11 +18,11 @@ export default class Logger {
         return `<span style="color: ${color}; background-color: ${bgColor || "transparent"}">${innerText}</span>`;
     }
 
-    static error(error: string) {
+    static error(error: string, dontEmit?: boolean) {
         Logger.log(Chalk.bgRed("[ERROR]"), Chalk.red(error));
-        Logger.tryEmitLog(Logger.colorHTML("white", "[ERROR]", "#b53232"), Logger.colorHTML("#b53232", error));
+        if (!dontEmit)
+            Logger.tryEmitLog(Logger.colorHTML("#b53232", "[ERROR]"), error);
     }
-
 
     static info(info: string) {
         Logger.log(Chalk.blue("[INFO]"), info);

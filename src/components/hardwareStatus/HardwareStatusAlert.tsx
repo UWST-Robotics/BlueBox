@@ -1,9 +1,10 @@
-import {Alert} from "@mui/material";
+import {Alert, AlertColor} from "@mui/material";
 import NetworkTableValue from "../../types/NetworkTableValue.ts";
 
 export interface HardwareStatusAlertProps {
     isActive: NetworkTableValue;
     text: string;
+    severity?: AlertColor;
 }
 
 export default function HardwareStatusAlert(props: HardwareStatusAlertProps) {
@@ -12,7 +13,7 @@ export default function HardwareStatusAlert(props: HardwareStatusAlertProps) {
     if (!isActive)
         return null;
     return (
-        <Alert severity="warning">
+        <Alert severity={props.severity ?? "warning"}>
             {text}
         </Alert>
     );

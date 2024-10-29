@@ -13,7 +13,11 @@ export interface HardwareStatusPropertyProps {
 export default function HardwareStatusProperty(props: HardwareStatusPropertyProps) {
     const {icon, name, value} = props;
 
-    if (value === undefined || value === null)
+    const numericValue = Number(value);
+
+    if (value === undefined ||
+        value === null ||
+        isNaN(numericValue))
         return null;
 
     return (
@@ -21,7 +25,7 @@ export default function HardwareStatusProperty(props: HardwareStatusPropertyProp
             {icon}
             <ListItemText
                 primary={name}
-                secondary={`${props.prefix || ""}${String(value)}${props.suffix || ""}`}
+                secondary={`${props.prefix || ""}${numericValue.toFixed(1)}${props.suffix || ""}`}
                 sx={{paddingLeft: 2}}
             />
         </ListItem>

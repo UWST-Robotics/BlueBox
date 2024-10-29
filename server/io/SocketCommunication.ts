@@ -7,7 +7,7 @@ import SerialCommunication from "./SerialCommunication";
 import SerialPortType from "../types/SerialPortInfo";
 
 export default class SocketCommunication {
-    static serialComms = new SerialCommunication("COM9");
+    static serialComms = new SerialCommunication("COM6");
     static httpsServer = createServer()
     static io = new Server(this.httpsServer, {
         cors: {

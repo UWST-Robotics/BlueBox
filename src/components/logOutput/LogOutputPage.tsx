@@ -3,6 +3,7 @@ import {Box} from "@mui/material";
 import useLog from "../../hooks/log/useLog.ts";
 import React from "react";
 import {Markup} from "interweave";
+import ansiToHtml from "../../utils/ansiToHtml.ts";
 
 export default function LogOutputPage() {
     const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -18,6 +19,8 @@ export default function LogOutputPage() {
             });
         }
     }, [logEntries, isPinnedToBottom]);
+
+    console.log(logEntries);
 
     if (currentTab !== "log")
         return null;
@@ -46,7 +49,7 @@ export default function LogOutputPage() {
                 {logEntries?.map((logEntry, index) => (
                     <Markup
                         key={index}
-                        content={logEntry.message}
+                        content={ansiToHtml(logEntry.message)}
                         tagName="div"
                     />
                 ))}

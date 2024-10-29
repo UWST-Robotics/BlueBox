@@ -13,19 +13,32 @@ export default function NetworkPoseRenderer(props: NetworkPoseRendererProps) {
     const color = poseGroup.records["color"];
     const x = parseNetworkValueToNumber(poseGroup.records["x"]);
     const y = parseNetworkValueToNumber(poseGroup.records["y"]);
-    const angle = parseNetworkValueToNumber(poseGroup.records["angle"]);
+    const angle = parseNetworkValueToNumber(poseGroup.records["rotation"]);
     const length = parseNetworkValueToNumber(poseGroup.records["length"]);
     const width = parseNetworkValueToNumber(poseGroup.records["width"]);
 
     return (
-        <PoseRenderer
-            label={name?.toString() ?? poseGroup.name}
-            strokeColor={color?.toString()}
-            x={x ?? 0}
-            y={y ?? 0}
-            angle={angle}
-            length={length}
-            width={width}
-        />
+        <>
+            <PoseRenderer
+                label={name?.toString() ?? poseGroup.name}
+                strokeColor={color?.toString()}
+                x={x ?? 0}
+                y={y ?? 0}
+                angle={angle}
+                length={length}
+                width={width}
+                opacity={0.1}
+                disableLerp
+            />
+            <PoseRenderer
+                label={name?.toString() ?? poseGroup.name}
+                strokeColor={color?.toString()}
+                x={x ?? 0}
+                y={y ?? 0}
+                angle={angle}
+                length={length}
+                width={width}
+            />
+        </>
     )
 }

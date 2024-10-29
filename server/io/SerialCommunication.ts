@@ -3,7 +3,6 @@ import Logger from "../common/Logger";
 import {DelimiterParser} from "@serialport/parser-delimiter";
 import NetworkTable from "../NetworkTable";
 import SocketCommunication from "./SocketCommunication";
-import Chalk from "chalk";
 import Heartbeat from "../common/Heartbeat";
 import SerialPortType from "../types/SerialPortInfo";
 
@@ -13,7 +12,7 @@ export default class SerialCommunication {
 
     serialPort: SerialPort;
     heartbeat: Heartbeat;
-    parser: DelimiterParser;
+    parserA: DelimiterParser;
 
     constructor(serialPath: string) {
 
@@ -25,7 +24,23 @@ export default class SerialCommunication {
 
         // Create Child Processes
         this.heartbeat = new Heartbeat(SerialCommunication.HEARTBEAT_INTERVAL, this.onMissedHeartbeat);
-        this.parser = this.serialPort.pipe(new DelimiterParser({delimiter: "\x0d"}));
+
+        // Wait for "sout" delimiter
+        this.parserA = this.serialPort.pipe(new DelimiterParser({delimiter: "sout"}));
+
+        // Remove Null Byte
+        this.parserA.on("data", (data) => {
+            // Find index of null byte
+            const nullByteIndex = data.indexOf(0);
+
+            // Slice data to remove null byte
+            if (nullByteIndex !== -1)
+                data = data.slice(0, nullByteIndex);
+
+            // Convert to a string using TextDecoder
+            const decoder = new TextDecoder();
+            this.onData(decoder.decode(data));
+        });
 
         // Handle Open
         this.serialPort.on("open", () => {
@@ -39,11 +54,9 @@ export default class SerialCommunication {
 
         // Loopback data
         // this.serialPort.on("data", (data) => {
-        //     serialPort.write(data);
+        //     console.log(data);
+        //     console.log(data.toString());
         // });
-
-        // Handle incoming data
-        this.parser.on("data", this.onData.bind(this));
     }
 
     /**
@@ -83,10 +96,9 @@ export default class SerialCommunication {
         try {
             // Parse Data
             const data = _data.toString().trim();
-            Logger.client(`Received data: ${data}`);
 
             // Update Value
-            if (data.startsWith("UPDATE")) {
+            if (data.startsWith("__NTUPDATE__")) {
                 const [, key] = data.split(" ");
                 const value = data.split(" ").slice(2).join(" ");
 
@@ -97,7 +109,7 @@ export default class SerialCommunication {
             }
 
             // Delete Value
-            else if (data.startsWith("DELETE")) {
+            else if (data.startsWith("__NTDELETE__")) {
                 const key = data.split(" ")[1];
                 // Delete the record from the network table
                 NetworkTable.records = NetworkTable.records.filter((record) => record.key !== key);
@@ -105,20 +117,13 @@ export default class SerialCommunication {
             }
 
             // Reset Table
-            else if (data.startsWith("RESET")) {
+            else if (data.startsWith("__NTRESET__")) {
                 NetworkTable.reset();
                 SocketCommunication.emitResetTable();
             }
 
-            // Log Message
-            else if (data.startsWith("LOG")) {
-                const message = data.split(" ").slice(1).join(" ");
-                Logger.client(`Received log: ${Chalk.yellow(message)}`);
-                SocketCommunication.emitLog(message);
-            }
-
             // Heartbeat
-            else if (data.startsWith("HEARTBEAT")) {
+            else if (data.startsWith("__NTHEARTBEAT__")) {
                 // Reset the heartbeat
                 this.heartbeat.beat();
 
@@ -128,9 +133,9 @@ export default class SerialCommunication {
                 SocketCommunication.emitUpdateRecord(record);
             }
 
-            // Unknown Command
+            // Normal Log
             else {
-                Logger.error(`Unknown command: ${data}`);
+                SocketCommunication.emitLog(_data.toString());
             }
         } catch (error) {
             Logger.error(`Error parsing data: ${error.message}`);

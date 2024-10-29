@@ -10,6 +10,8 @@ export interface PoseRendererProps {
     width?: number;
     strokeColor?: string;
     label?: string;
+    opacity?: number;
+    disableLerp?: boolean;
 }
 
 const STROKE_COLOR = "#315495";
@@ -37,10 +39,17 @@ export default function PoseRenderer(props: PoseRendererProps) {
         if (!groupRef.current)
             return () => {
             };
+        if (props.disableLerp) {
+            groupRef.current.x(x);
+            groupRef.current.y(y);
+            groupRef.current.rotation(actualAngle);
+            return () => {
+            };
+        }
 
         const targetX = x;
         const targetY = y;
-        const targetAngle = actualAngle;
+        const targetAngle = actualAngle % 360;
 
         const animation = new Konva.Animation(() => {
             const currentX = groupRef.current?.x() ?? 0;
@@ -50,6 +59,7 @@ export default function PoseRenderer(props: PoseRendererProps) {
             const dx = targetX - currentX;
             const dy = targetY - currentY;
             const dAngle = (targetAngle - currentAngle + 180) % 360 - 180;
+
 
             const STEP_SIZE = 0.1;
             const newX = currentX + dx * STEP_SIZE;
@@ -63,7 +73,7 @@ export default function PoseRenderer(props: PoseRendererProps) {
 
         animation.start();
         return () => animation.stop();
-    }, [x, y, actualAngle]);
+    }, [x, y, actualAngle, props.disableLerp]);
 
     return (
         <Group
@@ -77,6 +87,7 @@ export default function PoseRenderer(props: PoseRendererProps) {
                 height={actualWidth}
                 stroke={strokeColor ?? STROKE_COLOR}
                 strokeWidth={1}
+                opacity={props.opacity ?? 1}
             />
 
             {/* Angle */}
@@ -85,6 +96,7 @@ export default function PoseRenderer(props: PoseRendererProps) {
                     points={[0, 0, actualLength * 0.8, 0]}
                     stroke={strokeColor ?? STROKE_COLOR}
                     strokeWidth={1}
+                    opacity={props.opacity ?? 1}
                 />
             )}
 
@@ -97,6 +109,7 @@ export default function PoseRenderer(props: PoseRendererProps) {
                 width={actualLength * 2}
                 align="center"
                 fill="#aaa"
+                opacity={props.opacity ?? 1}
             />
         </Group>
     )

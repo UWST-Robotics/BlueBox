@@ -10,6 +10,7 @@ export default class NetworkTable {
         } else {
             this.records.push(record);
         }
+        return record;
     }
 
     static getRecord(key: string) {
