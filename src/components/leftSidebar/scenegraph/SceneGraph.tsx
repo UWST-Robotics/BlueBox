@@ -1,9 +1,9 @@
 import {Box, List} from "@mui/material";
-import useNetworkTableGroups from "../../../hooks/networkTable/useNetworkTableGroups.ts";
 import SceneGraphGroup from "./SceneGraphGroup.tsx";
+import useNetworkTableRoot from "../../../hooks/networkTable/useNetworkTableRoot.ts";
 
 export default function SceneGraph() {
-    const [rootGroup] = useNetworkTableGroups();
+    const rootGroup = useNetworkTableRoot();
 
     return (
         <Box

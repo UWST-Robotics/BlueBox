@@ -1,10 +1,10 @@
 import StatusBanner from "./StatusBanner.tsx";
 import {Box} from "@mui/material";
 import useSocketStatus from "../../../hooks/socket/useSocketStatus.ts";
-import useNetworkTableGroup from "../../../hooks/networkTable/useNetworkTableGroup.ts";
 import {ROBOT_GROUP, SERVER_GROUP} from "../../../types/GroupNames.ts";
 import BatteryIndicator from "./BatteryIndicator.tsx";
 import SerialIndicator from "./SerialIndicator.tsx";
+import useNetworkTableGroup from "../../../hooks/networkTable/useNetworkTableGroup.ts";
 
 export default function StatusHeader() {
     const socketStatus = useSocketStatus();

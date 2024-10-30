@@ -1,6 +1,8 @@
 import {Group, Line, Rect, Text} from 'react-konva';
 import React from "react";
 import Konva from "konva";
+import lerp from "../../../../utils/lerp.ts";
+import lerpDegrees from "../../../../utils/lerpDegrees.ts";
 
 export interface PoseRendererProps {
     x: number;
@@ -17,6 +19,7 @@ export interface PoseRendererProps {
 const STROKE_COLOR = "#315495";
 const WIDTH = 4;
 const HEIGHT = 4;
+const STEP_SIZE = 0.2;
 
 export default function PoseRenderer(props: PoseRendererProps) {
     const {
@@ -56,15 +59,9 @@ export default function PoseRenderer(props: PoseRendererProps) {
             const currentY = groupRef.current?.y() ?? 0;
             const currentAngle = groupRef.current?.rotation() ?? 0;
 
-            const dx = targetX - currentX;
-            const dy = targetY - currentY;
-            const dAngle = (targetAngle - currentAngle + 180) % 360 - 180;
-
-
-            const STEP_SIZE = 0.1;
-            const newX = currentX + dx * STEP_SIZE;
-            const newY = currentY + dy * STEP_SIZE;
-            const newAngle = currentAngle + dAngle * STEP_SIZE;
+            const newX = lerp(STEP_SIZE, currentX, targetX);
+            const newY = lerp(STEP_SIZE, currentY, targetY);
+            const newAngle = lerpDegrees(STEP_SIZE, currentAngle, targetAngle);
 
             groupRef.current?.x(newX);
             groupRef.current?.y(newY);

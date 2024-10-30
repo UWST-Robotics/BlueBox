@@ -25,6 +25,7 @@ export default function GridRenderer(props: GridRendererProps) {
         <Group
             listening={false}
         >
+            
             {/* Horizontal lines */}
             {[...Array(gridSize)].map((_, i) => (
                 <Line
@@ -34,6 +35,7 @@ export default function GridRenderer(props: GridRendererProps) {
                     strokeWidth={strokeWidth ?? STROKE_WIDTH}
                 />
             ))}
+
             {/* Vertical lines */}
             {[...Array(gridSize)].map((_, i) => (
                 <Line

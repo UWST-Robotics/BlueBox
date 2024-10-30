@@ -5,6 +5,7 @@ import NetworkTable from "../NetworkTable";
 import SocketCommunication from "./SocketCommunication";
 import Heartbeat from "../common/Heartbeat";
 import SerialPortType from "../types/SerialPortInfo";
+import NetworkTableValue from "../types/NetworkTableValue";
 
 export default class SerialCommunication {
     static HEARTBEAT_INTERVAL = 500;
@@ -48,6 +49,7 @@ export default class SerialCommunication {
         this.serialPort.on("open", () => {
             Logger.info("Serial port opened on " + this.serialPort.path);
             SerialCommunication.updateNetworkTable("serialStatus", "open");
+            SerialCommunication.updateNetworkTable("heartbeat", "offline");
         });
 
         // Handle Errors
@@ -59,6 +61,7 @@ export default class SerialCommunication {
         this.serialPort.on("close", () => {
             Logger.info("Serial port closed");
             SerialCommunication.updateNetworkTable("serialStatus", "closed");
+            SerialCommunication.updateNetworkTable("heartbeat", "offline");
         });
     }
 
@@ -117,7 +120,17 @@ export default class SerialCommunication {
             // Update Value
             if (data.startsWith("__NTUPDATE__")) {
                 const [, key] = data.split(" ");
-                const value = data.split(" ").slice(2).join(" ");
+                const stringValue = data.split(" ").slice(2).join(" ");
+
+
+                // Parse the value
+                const lowerCaseValue = stringValue.toLowerCase();
+                let value: NetworkTableValue = stringValue;
+                if (lowerCaseValue === "true" || lowerCaseValue === "false")
+                    value = stringValue === "true";
+                else if (!isNaN(parseFloat(stringValue)))
+                    value = parseFloat(stringValue);
+
 
                 // Update the network table
                 const record = {key, value};

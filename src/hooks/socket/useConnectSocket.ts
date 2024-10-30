@@ -3,10 +3,11 @@ import primaryStore from "../primaryStore.ts";
 import useSocket from "./useSocket.ts";
 import React from "react";
 import NetworkTableRecord from "../../types/NetworkTableRecord.ts";
-import {networkTableAtom} from "../networkTable/useNetworkTable.ts";
 import {logAtom} from "../log/useLog.ts";
 import {serialPortsAtom} from "../serialPorts/useSerialPorts.ts";
 import SerialPortInfo from "../../types/SerialPortInfo.ts";
+import {networkTableValueAtomFamily} from "../networkTable/useNetworkTableValue.ts";
+import {resetNetworkTableAtom} from "../networkTable/actions/useResetNetworkTable.ts";
 
 export default function useSocketConnection() {
     const socket = useSocket();
@@ -27,25 +28,22 @@ export default function useSocketConnection() {
 
         socket.on("setAllRecords", (records: NetworkTableRecord[]) => {
             console.log("Received all records from server");
-            primaryStore.set(networkTableAtom, records);
+            records.forEach((record) => {
+                console.log(`SET ${record.key} = ${record.value}`);
+                const valueAtom = networkTableValueAtomFamily(record.key);
+                primaryStore.set(valueAtom, record.value);
+            });
         });
 
         socket.on("updateRecord", (record: NetworkTableRecord) => {
-            primaryStore.set(networkTableAtom, (prev) => {
-                const index = prev.findIndex((r) => r.key === record.key);
-                if (index !== -1) {
-                    prev[index] = record;
-                } else {
-                    prev.push(record);
-                }
-                return [...prev];
-            });
+            const valueAtom = networkTableValueAtomFamily(record.key);
+            primaryStore.set(valueAtom, record.value);
+            console.log(`SET ${record.key} = ${record.value}`);
         });
 
         socket.on("deleteRecord", (key: string) => {
-            primaryStore.set(networkTableAtom, (prev) => {
-                return prev.filter((r) => r.key !== key);
-            });
+            const valueAtom = networkTableValueAtomFamily(key);
+            primaryStore.set(valueAtom, undefined);
         });
 
         socket.on("log", (message: string) => {
@@ -60,9 +58,7 @@ export default function useSocketConnection() {
 
         socket.on("resetTable", () => {
             console.log("Server requested table reset");
-            primaryStore.set(networkTableAtom, (prev) => {
-                return prev.filter((r) => r.key.startsWith("_server/"));
-            });
+            primaryStore.set(resetNetworkTableAtom);
         });
 
         socket.on("serialPorts", (ports: SerialPortInfo[]) => {

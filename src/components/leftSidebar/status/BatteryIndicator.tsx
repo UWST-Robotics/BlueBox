@@ -24,8 +24,11 @@ export default function BatteryIndicator(props: BatteryIndicatorProps) {
     const {voltage, current, temperature} = props;
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
-    const batteryPercent = Math.max(0, Math.min(100, (voltage - MIN_VOLTAGE) / (MAX_VOLTAGE - MIN_VOLTAGE) * 100));
-
+    // Calculate battery percentage
+    let batteryPercent = (voltage - MIN_VOLTAGE) / (MAX_VOLTAGE - MIN_VOLTAGE);
+    batteryPercent *= 100;
+    batteryPercent = Math.max(0, Math.min(100, batteryPercent));
+    
     return (
         <>
             <IconButton

@@ -1,34 +1,67 @@
 import {atomFamily} from "jotai/utils";
 import {atom, useAtomValue} from "jotai";
-import {networkTableGroupsAtom} from "./useNetworkTableGroups.ts";
+import {networkTableRootAtom} from "./useNetworkTableRoot.ts";
+import NetworkTableGroup from "../../types/NetworkTableGroup.ts";
+import {childNameAtomFamily} from "./utils/useChildName.ts";
+import {parentPathAtomFamily} from "./utils/useParentPath.ts";
 
 // Atoms
 export const networkTableGroupAtomFamily = atomFamily((path: string) => atom((get) => {
 
-    // Split path into keys
-    const pathKeys = path.split("/");
+    // Get Root
+    const root = get(networkTableRootAtom);
 
-    // Get root group
-    let currentGroup = get(networkTableGroupsAtom);
+    // If path is empty, return root
+    if (path === "")
+        return root;
 
-    // Traverse path
-    while (pathKeys.length > 0) {
+    // Split Path
+    const parts = path.split("/");
 
-        // Get next key
-        const key = pathKeys.shift();
-        if (!key)
-            break;
-
-        // Find group
-        const group = currentGroup.children[key];
-        if (!group)
+    // Get group of each part
+    let group = root;
+    for (let i = 0; i < parts.length; i++) {
+        group = group.children[parts[i]];
+        if (group === undefined)
             return undefined;
-
-        // Update current group
-        currentGroup = group;
     }
 
-    return currentGroup;
+    return group;
+
+}, (get, set, group: NetworkTableGroup) => {
+
+    // Get Path Values
+    const parentPath = get(parentPathAtomFamily(path));
+    const groupName = get(childNameAtomFamily(path));
+
+    // Update Root
+    if (path === "") {
+        set(networkTableRootAtom, group);
+        return;
+    }
+
+    // Get Parent
+    const parentAtom = networkTableGroupAtomFamily(parentPath);
+    let parent = get(parentAtom);
+
+    // If parent doesn't exist, make it
+    if (parent === undefined)
+        parent = {
+            name: get(childNameAtomFamily(parentPath)),
+            path: parentPath,
+            children: {},
+            records: {}
+        };
+
+    // Update Parent
+    set(parentAtom, {
+        ...parent,
+        children: {
+            ...parent.children,
+            [groupName]: {...group}
+        }
+    });
+
 }));
 
 // Hooks

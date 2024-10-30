@@ -1,6 +1,7 @@
 import {ListItemButton, ListItemText} from "@mui/material";
 import ColoredListItem from "../../common/ColoredListItem.tsx";
 import NetworkTableValue from "../../../types/NetworkTableValue.ts";
+import networkValueToString from "../../../utils/networkValueToString.ts";
 
 export interface SceneGraphItemProps {
     name: string;
@@ -11,8 +12,7 @@ export interface SceneGraphItemProps {
 export default function SceneGraphItem(props: SceneGraphItemProps) {
     const {name, value} = props;
 
-
-    const valueText = String(value);
+    const valueText = networkValueToString(value);
     const depth = props.depth || 0;
 
     return (
