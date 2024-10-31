@@ -18,10 +18,13 @@ export default function SceneGraph() {
                     paddingRight: 2
                 }}
             >
-                <SceneGraphGroup
-                    groupInfo={rootInfo}
-                    isRoot
-                />
+                {rootInfo.children.map((child) => (
+                    <SceneGraphGroup
+                        key={child.path}
+                        groupInfo={child}
+                        depth={1}
+                    />
+                ))}
             </List>
         </Box>
     )

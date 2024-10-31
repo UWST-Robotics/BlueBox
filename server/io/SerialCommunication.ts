@@ -138,18 +138,10 @@ export default class SerialCommunication {
                 SocketCommunication.emitUpdateRecord(record);
             }
 
-            // Delete Value
-            else if (data.startsWith("__NTDELETE__")) {
-                const key = data.split(" ")[1];
-                // Delete the record from the network table
-                NetworkTable.records = NetworkTable.records.filter((record) => record.key !== key);
-                SocketCommunication.emitDeleteRecord(key);
-            }
-
             // Reset Table
             else if (data.startsWith("__NTRESET__")) {
                 NetworkTable.reset();
-                SocketCommunication.emitResetTable();
+                SocketCommunication.emitSetAllRecords([]);
             }
 
             // Heartbeat

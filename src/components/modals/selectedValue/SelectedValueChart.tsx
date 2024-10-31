@@ -5,8 +5,7 @@ import useCurrentTime from "../../../hooks/common/useCurrentTime.ts";
 import useSelectedPath from "../../../hooks/selectedPath/useSelectedPath.ts";
 import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
 import parseNetworkValueToNumber from "../../../utils/parseNetworkValueToNumber.ts";
-
-const TIME_WINDOW = 10000;
+import {MAX_TIME_WINDOW} from "../../../hooks/valueOverTime/actions/useUpdateValueOverTime.ts";
 
 export default function SelectedValueChart() {
     const selectedPath = useSelectedPath();
@@ -36,14 +35,15 @@ export default function SelectedValueChart() {
                 <CartesianGrid strokeDasharray="3 3" stroke={"#222"}/>
                 <YAxis
                     dataKey="value"
-                    allowDecimals={false}
                     tickCount={10}
+                    type={"number"}
+                    tickFormatter={(value: number) => value.toFixed(2)}
                 />
                 <XAxis
                     dataKey={"time"}
                     type={"number"}
                     allowDataOverflow={true}
-                    domain={[currentTime - TIME_WINDOW, currentTime]}
+                    domain={[currentTime - MAX_TIME_WINDOW, currentTime]}
                     tickFormatter={formatTime}
                 />
 
@@ -59,6 +59,7 @@ export default function SelectedValueChart() {
                 <Tooltip
                     labelFormatter={formatTime}
                     formatter={(value: number) => value.toFixed(2)}
+                    isAnimationActive={false}
                     contentStyle={{
                         backgroundColor: '#333',
                         color: '#fff',

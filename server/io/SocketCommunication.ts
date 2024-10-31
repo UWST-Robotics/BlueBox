@@ -4,7 +4,6 @@ import NetworkTable from "../NetworkTable";
 import Logger from "../common/Logger";
 import NetworkTableRecord from "../types/NetworkTableRecord";
 import SerialCommunication from "./SerialCommunication";
-import SerialPortType from "../types/SerialPortInfo";
 
 export default class SocketCommunication {
     static serialComms = new SerialCommunication("COM6");
@@ -26,7 +25,8 @@ export default class SocketCommunication {
         socket.on("getSerialPorts", () => {
             SocketCommunication.serialComms.getAllPorts().then((ports) => {
                 Logger.client(`Sending ${ports.length} serial ports to user`);
-                SocketCommunication.emitSerialPorts(ports);
+                // TODO: Fix Serial Port Selection
+                //SocketCommunication.emitSerialPorts(ports);
             }).catch(Logger.error);
         });
 
@@ -37,7 +37,8 @@ export default class SocketCommunication {
             SocketCommunication.serialComms = new SerialCommunication(port);
             SocketCommunication.serialComms.getAllPorts().then((ports) => {
                 Logger.client(`Sending ${ports.length} serial ports to user`);
-                SocketCommunication.emitSerialPorts(ports);
+                // TODO: Fix Serial Port Selection
+                //SocketCommunication.emitSerialPorts(ports);
             }).catch(Logger.error);
         });
 
@@ -50,24 +51,16 @@ export default class SocketCommunication {
         });
     }
 
+    static emitSetAllRecords(records: NetworkTableRecord[]) {
+        this.io.emit("setAllRecords", records);
+    }
+
     static emitUpdateRecord(record: NetworkTableRecord) {
         this.io.emit("updateRecord", record);
     }
 
-    static emitDeleteRecord(key: string) {
-        this.io.emit("deleteRecord", key);
-    }
-
-    static emitResetTable() {
-        this.io.emit("resetTable");
-    }
-
     static emitLog(message: string) {
         this.io.emit("log", message);
-    }
-
-    static emitSerialPorts(ports: SerialPortType[]) {
-        this.io.emit("serialPorts", ports);
     }
 
     static listen() {
