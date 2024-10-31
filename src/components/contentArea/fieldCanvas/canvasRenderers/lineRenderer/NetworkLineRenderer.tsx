@@ -1,5 +1,5 @@
-import NetworkTableGroup from "../../../../types/NetworkTableGroup.ts";
-import parseNetworkValueToNumber from "../../../../utils/parseNetworkValueToNumber.ts";
+import NetworkTableGroup from "../../../../../types/NetworkTableGroup.ts";
+import parseNetworkValueToNumber from "../../../../../utils/parseNetworkValueToNumber.ts";
 import React from "react";
 import {Circle, Group, Line} from "react-konva";
 

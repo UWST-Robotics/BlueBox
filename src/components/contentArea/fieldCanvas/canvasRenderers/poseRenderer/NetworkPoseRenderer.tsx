@@ -1,6 +1,6 @@
-import NetworkTableGroup from "../../../../types/NetworkTableGroup.ts";
+import NetworkTableGroup from "../../../../../types/NetworkTableGroup.ts";
 import PoseRenderer from "./PoseRenderer.tsx";
-import parseNetworkValueToNumber from "../../../../utils/parseNetworkValueToNumber.ts";
+import parseNetworkValueToNumber from "../../../../../utils/parseNetworkValueToNumber.ts";
 
 export interface NetworkPoseRendererProps {
     poseGroup: NetworkTableGroup;

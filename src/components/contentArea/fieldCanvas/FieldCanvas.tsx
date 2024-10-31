@@ -1,9 +1,9 @@
 import {Group, Layer, Rect, Stage} from "react-konva";
-import useWindowSize from "../../hooks/common/useWindowSize.ts";
+import useWindowSize from "../../../hooks/common/useWindowSize.ts";
 import GridRenderer from "./canvasRenderers/GridRenderer.tsx";
 import React from "react";
 import NetworkGroupRenderer from "./canvasRenderers/NetworkGroupRenderer.tsx";
-import {LINES_GROUP, POSE_GROUP} from "../../types/GroupNames.ts";
+import {LINES_GROUP, POSE_GROUP} from "../../../types/GroupNames.ts";
 import NetworkPoseRenderer from "./canvasRenderers/poseRenderer/NetworkPoseRenderer.tsx";
 import NetworkLineRenderer from "./canvasRenderers/lineRenderer/NetworkLineRenderer.tsx";
 
@@ -59,13 +59,13 @@ export default function FieldCanvas() {
                     {/* Lines */}
                     <NetworkGroupRenderer
                         groupName={LINES_GROUP}
-                        renderChild={(group) => <NetworkLineRenderer lineGroup={group}/>}
+                        renderChild={(group) => <NetworkLineRenderer key={group.path} lineGroup={group}/>}
                     />
 
                     {/* Poses */}
                     <NetworkGroupRenderer
                         groupName={POSE_GROUP}
-                        renderChild={(group) => <NetworkPoseRenderer poseGroup={group}/>}
+                        renderChild={(group) => <NetworkPoseRenderer key={group.path} poseGroup={group}/>}
                     />
                 </Group>
             </Layer>

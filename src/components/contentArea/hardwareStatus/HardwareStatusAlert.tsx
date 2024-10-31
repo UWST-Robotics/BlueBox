@@ -1,5 +1,5 @@
 import {Alert, AlertColor} from "@mui/material";
-import NetworkTableValue from "../../types/NetworkTableValue.ts";
+import NetworkTableValue from "../../../types/NetworkTableValue.ts";
 
 export interface HardwareStatusAlertProps {
     isActive: NetworkTableValue;

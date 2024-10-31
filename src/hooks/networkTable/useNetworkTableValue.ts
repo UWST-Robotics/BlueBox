@@ -4,6 +4,7 @@ import {networkTableGroupAtomFamily} from "./useNetworkTableGroup.ts";
 import {parentPathAtomFamily} from "./utils/useParentPath.ts";
 import {childNameAtomFamily} from "./utils/useChildName.ts";
 import NetworkTableValue from "../../types/NetworkTableValue.ts";
+import {updateValueOverTimeAtom} from "../valueOverTime/actions/useUpdateValueOverTime.ts";
 
 // Atoms
 export const networkTableValueAtomFamily = atomFamily((path: string) => atom((get) => {
@@ -11,10 +12,15 @@ export const networkTableValueAtomFamily = atomFamily((path: string) => atom((ge
     // Get Parent Group
     const groupPath = get(parentPathAtomFamily(path));
     const group = get(networkTableGroupAtomFamily(groupPath));
+    if (!group)
+        return undefined;
 
     // Get Value
     const valueName = get(childNameAtomFamily(path));
-    return group?.records[valueName];
+    if (!(valueName in group.records))
+        return undefined;
+
+    return group.records[valueName];
 
 }, (get, set, value: NetworkTableValue) => {
 
@@ -42,6 +48,8 @@ export const networkTableValueAtomFamily = atomFamily((path: string) => atom((ge
         }
     });
 
+    // Update "Value over Time"
+    set(updateValueOverTimeAtom, {path, value})
 }));
 
 // Hooks

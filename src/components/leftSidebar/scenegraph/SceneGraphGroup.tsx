@@ -1,4 +1,4 @@
-import {Collapse, Divider, List, ListItemButton, ListItemText} from "@mui/material";
+import {Collapse, Divider, IconButton, List, ListItemButton, ListItemText} from "@mui/material";
 import NetworkTableGroup from "../../../types/NetworkTableGroup.ts";
 import SceneGraphItem from "./SceneGraphItem.tsx";
 import React from "react";
@@ -25,7 +25,12 @@ export default function SceneGraphGroup(props: SceneGraphGroupProps) {
                     disablePadding
                     intent="primary"
                     secondaryAction={(
-                        <AnimatedCaretIcon up={isCollapsed}/>
+                        <IconButton
+                            size={"small"}
+                            onClick={() => setIsCollapsed(!isCollapsed)}
+                        >
+                            <AnimatedCaretIcon up={isCollapsed}/>
+                        </IconButton>
                     )}
                 >
                     <ListItemButton
@@ -49,7 +54,7 @@ export default function SceneGraphGroup(props: SceneGraphGroupProps) {
                 <List disablePadding>
                     {childrenKeys.map((childKey) => (
                         <SceneGraphGroup
-                            key={childKey}
+                            key={props.networkGroup.children[childKey].path}
                             networkGroup={props.networkGroup.children[childKey]}
                             depth={depth + 1}
                         />
@@ -59,6 +64,7 @@ export default function SceneGraphGroup(props: SceneGraphGroupProps) {
                             key={recordKey}
                             depth={depth + 1}
                             name={recordKey}
+                            path={props.networkGroup.path + "/" + recordKey}
                             value={props.networkGroup.records[recordKey]}
                         />
                     ))}

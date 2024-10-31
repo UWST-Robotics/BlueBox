@@ -1,8 +1,8 @@
 import {Group, Line, Rect, Text} from 'react-konva';
 import React from "react";
 import Konva from "konva";
-import lerp from "../../../../utils/lerp.ts";
-import lerpDegrees from "../../../../utils/lerpDegrees.ts";
+import lerp from "../../../../../utils/lerp.ts";
+import lerpDegrees from "../../../../../utils/lerpDegrees.ts";
 
 export interface PoseRendererProps {
     x: number;

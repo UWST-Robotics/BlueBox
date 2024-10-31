@@ -1,4 +1,4 @@
-import NetworkTableGroup from "../../types/NetworkTableGroup.ts";
+import NetworkTableGroup from "../../../types/NetworkTableGroup.ts";
 import {Card, CardContent, List, Typography} from "@mui/material";
 import HardwareStatusProperty from "./HardwareStatusProperty.tsx";
 import {Bolt, Expand, Explore, Palette, Refresh, Rotate90DegreesCw, Speed, Thermostat} from "@mui/icons-material";

@@ -1,4 +1,4 @@
-import useCurrentTab from "../../hooks/navigation/currentTab.ts";
+import useCurrentTab from "../../../hooks/navigation/currentTab.ts";
 import {Box} from "@mui/material";
 import FieldCanvas from "./FieldCanvas.tsx";
 

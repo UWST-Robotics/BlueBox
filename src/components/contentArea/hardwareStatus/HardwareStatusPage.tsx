@@ -1,8 +1,8 @@
-import {HARDWARE_INFO_GROUP} from "../../types/GroupNames.ts";
-import useCurrentTab from "../../hooks/navigation/currentTab.ts";
+import {HARDWARE_INFO_GROUP} from "../../../types/GroupNames.ts";
+import useCurrentTab from "../../../hooks/navigation/currentTab.ts";
 import {Box} from "@mui/material";
 import HardwareStatusCard from "./HardwareStatusCard.tsx";
-import useNetworkTableGroup from "../../hooks/networkTable/useNetworkTableGroup.ts";
+import useNetworkTableGroup from "../../../hooks/networkTable/useNetworkTableGroup.ts";
 
 export default function HardwareStatusPage() {
     const [currentTab] = useCurrentTab();

@@ -1,7 +1,7 @@
 import {Group} from "react-konva";
-import NetworkTableGroup from "../../../types/NetworkTableGroup.ts";
+import NetworkTableGroup from "../../../../types/NetworkTableGroup.ts";
 import React from "react";
-import useNetworkTableGroup from "../../../hooks/networkTable/useNetworkTableGroup.ts";
+import useNetworkTableGroup from "../../../../hooks/networkTable/useNetworkTableGroup.ts";
 
 export interface AllPosesRendererProps {
     groupName: string;

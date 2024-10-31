@@ -1,9 +1,9 @@
-import useCurrentTab from "../../hooks/navigation/currentTab.ts";
+import useCurrentTab from "../../../hooks/navigation/currentTab.ts";
 import {Box} from "@mui/material";
-import useLog from "../../hooks/log/useLog.ts";
+import useLog from "../../../hooks/log/useLog.ts";
 import React from "react";
 import {Markup} from "interweave";
-import ansiToHtml from "../../utils/ansiToHtml.ts";
+import ansiToHtml from "../../../utils/ansiToHtml.ts";
 
 export default function LogOutputPage() {
     const scrollRef = React.useRef<HTMLDivElement>(null);

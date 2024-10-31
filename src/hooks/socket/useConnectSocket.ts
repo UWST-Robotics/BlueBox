@@ -29,7 +29,6 @@ export default function useSocketConnection() {
         socket.on("setAllRecords", (records: NetworkTableRecord[]) => {
             console.log("Received all records from server");
             records.forEach((record) => {
-                console.log(`SET ${record.key} = ${record.value}`);
                 const valueAtom = networkTableValueAtomFamily(record.key);
                 primaryStore.set(valueAtom, record.value);
             });
@@ -38,7 +37,6 @@ export default function useSocketConnection() {
         socket.on("updateRecord", (record: NetworkTableRecord) => {
             const valueAtom = networkTableValueAtomFamily(record.key);
             primaryStore.set(valueAtom, record.value);
-            console.log(`SET ${record.key} = ${record.value}`);
         });
 
         socket.on("deleteRecord", (key: string) => {

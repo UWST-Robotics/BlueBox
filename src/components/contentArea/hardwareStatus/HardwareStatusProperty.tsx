@@ -1,6 +1,6 @@
 import React from "react";
 import {ListItem, ListItemText} from "@mui/material";
-import NetworkTableValue from "../../types/NetworkTableValue.ts";
+import NetworkTableValue from "../../../types/NetworkTableValue.ts";
 
 export interface HardwareStatusPropertyProps {
     icon: React.ReactNode;

@@ -2,15 +2,19 @@ import {ListItemButton, ListItemText} from "@mui/material";
 import ColoredListItem from "../../common/ColoredListItem.tsx";
 import NetworkTableValue from "../../../types/NetworkTableValue.ts";
 import networkValueToString from "../../../utils/networkValueToString.ts";
+import useSelectPath from "../../../hooks/selectedPath/actions/useSelectPath.ts";
 
 export interface SceneGraphItemProps {
     name: string;
+    path: string;
     value: NetworkTableValue;
     depth?: number;
 }
 
 export default function SceneGraphItem(props: SceneGraphItemProps) {
-    const {name, value} = props;
+    const enableValueOverTime = useSelectPath();
+
+    const {name, path, value} = props;
 
     const valueText = networkValueToString(value);
     const depth = props.depth || 0;
@@ -27,6 +31,7 @@ export default function SceneGraphItem(props: SceneGraphItemProps) {
             )}
         >
             <ListItemButton
+                onClick={() => enableValueOverTime(path)}
                 disableGutters
                 dense
                 sx={{
