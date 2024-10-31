@@ -1,7 +1,6 @@
 import {atom} from "jotai";
 import {valuesOverTimeAtom} from "../useValuesOverTime.ts";
 import NetworkTableValue from "../../../types/NetworkTableValue.ts";
-import {selectedPathAtom} from "../../selectedPath/useSelectedPath.ts";
 
 export interface UpdateValueOverTimeProps {
     path: string;
@@ -14,17 +13,22 @@ export const MAX_VALUES_OVER_TIME = 1000;
 export const updateValueOverTimeAtom = atom(null, (get, set, props: UpdateValueOverTimeProps) => {
 
     // Check the selected path
-    const selectedPath = get(selectedPathAtom);
-    if (selectedPath != props.path)
+    // const selectedPath = get(selectedPathAtom);
+    // if (selectedPath != props.path)
+    //     return;
+
+    // Cast to number
+    const numericValue = Number(props.value);
+    if (isNaN(numericValue))
         return;
 
-    // Update the value
-    const numericValue = Number(props.value);
-    const valuesOverTime = get(valuesOverTimeAtom);
+    // Update the values over time
+    const valueOverTimeAtom = valuesOverTimeAtom(props.path);
+    const valuesOverTime = get(valueOverTimeAtom);
     const newValue = {
         time: Date.now(),
         value: numericValue
     };
 
-    set(valuesOverTimeAtom, [...valuesOverTime, newValue].splice(-MAX_VALUES_OVER_TIME));
+    set(valueOverTimeAtom, [...valuesOverTime, newValue].splice(-MAX_VALUES_OVER_TIME));
 });

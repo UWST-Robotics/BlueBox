@@ -2,11 +2,13 @@ import {CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tool
 import useValuesOverTime from "../../../hooks/valueOverTime/useValuesOverTime.ts";
 import useSelectedPathStats from "../../../hooks/valueOverTime/useSelectedPathStats.ts";
 import useCurrentTime from "../../../hooks/common/useCurrentTime.ts";
+import useSelectedPath from "../../../hooks/selectedPath/useSelectedPath.ts";
 
 const TIME_WINDOW = 10000;
 
 export default function SelectedValueChart() {
-    const [valuesOverTime] = useValuesOverTime();
+    const selectedPath = useSelectedPath();
+    const [valuesOverTime] = useValuesOverTime(selectedPath || "");
     const [min, max, average] = useSelectedPathStats();
     const currentTime = useCurrentTime(1000);
 
