@@ -1,18 +1,18 @@
-import NetworkTableGroup from "../../../types/NetworkTableGroup.ts";
+import NTGroupInfo from "../../../types/nt/NTGroupInfo.ts";
 import {Card, CardContent, List, Typography} from "@mui/material";
 import HardwareStatusProperty from "./HardwareStatusProperty.tsx";
 import {Bolt, Expand, Explore, Palette, Refresh, Rotate90DegreesCw, Speed, Thermostat} from "@mui/icons-material";
 import HardwareStatusAlert from "./HardwareStatusAlert.tsx";
+import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
 
 export interface HardwareStatusCardProps {
-    hardwareGroup: NetworkTableGroup;
+    hardwareGroup: NTGroupInfo;
 }
 
 export default function HardwareStatusCard(props: HardwareStatusCardProps) {
     const {hardwareGroup} = props;
-
-    const name = hardwareGroup.records["name"];
-    const type = hardwareGroup.records["type"];
+    const name = useNTValue(hardwareGroup.path + "/name");
+    const type = useNTValue(hardwareGroup.path + "/type");
 
     return (
         <Card sx={{minWidth: 275}}>
@@ -34,125 +34,126 @@ export default function HardwareStatusCard(props: HardwareStatusCardProps) {
                     <HardwareStatusProperty
                         icon={<Thermostat/>}
                         name={"Temperature"}
-                        value={hardwareGroup.records["temperature"]}
+                        path={hardwareGroup.path + "/temperature"}
                         suffix="°C"
                     />
                     <HardwareStatusProperty
                         icon={<Speed/>}
                         name={"Velocity"}
-                        value={hardwareGroup.records["velocity"]}
+                        path={hardwareGroup.path + "/velocity"}
                         suffix=" RPM"
                     />
                     <HardwareStatusProperty
                         icon={<Refresh/>}
                         name={"Position"}
-                        value={hardwareGroup.records["position"]}
+                        path={hardwareGroup.path + "/position"}
                         suffix=" ticks"
                     />
                     <HardwareStatusProperty
                         icon={<Bolt/>}
                         name={"Current"}
-                        value={hardwareGroup.records["current"]}
+                        path={hardwareGroup.path + "/current"}
                         suffix="mA"
                     />
                     <HardwareStatusProperty
                         icon={<Bolt/>}
                         name={"Voltage"}
-                        value={hardwareGroup.records["voltage"]}
+                        path={hardwareGroup.path + "/voltage"}
                         suffix="mV"
                     />
 
                     <HardwareStatusProperty
                         icon={<Explore/>}
                         name={"Heading"}
-                        value={hardwareGroup.records["heading"]}
+                        path={hardwareGroup.path + "/heading"}
                         suffix="°"
                     />
                     <HardwareStatusProperty
                         icon={<Rotate90DegreesCw/>}
                         name={"Pitch"}
-                        value={hardwareGroup.records["pitch"]}
+                        path={hardwareGroup.path + "/pitch"}
                         suffix="°"
                     />
                     <HardwareStatusProperty
                         icon={<Rotate90DegreesCw/>}
                         name={"Roll"}
-                        value={hardwareGroup.records["roll"]}
+                        path={hardwareGroup.path + "/roll"}
                         suffix="°"
                     />
                     <HardwareStatusProperty
                         icon={<Rotate90DegreesCw/>}
                         name={"Yaw"}
-                        value={hardwareGroup.records["yaw"]}
+                        path={hardwareGroup.path + "/yaw"}
                         suffix="°"
                     />
                     <HardwareStatusProperty
                         icon={<Speed/>}
                         name={"Acceleration"}
-                        value={hardwareGroup.records["accel"]}
+                        path={hardwareGroup.path + "/accel"}
                         suffix=" m/s²"
                     />
 
                     <HardwareStatusProperty
                         icon={<Expand/>}
                         name={"Proximity"}
-                        value={hardwareGroup.records["proximity"]}
+                        path={hardwareGroup.path + "/proximity"}
                         suffix="%"
                     />
                     <HardwareStatusProperty
                         icon={<Palette/>}
                         name={"Hue"}
-                        value={hardwareGroup.records["colorHue"]}
+                        path={hardwareGroup.path + "/colorHue"}
                     />
                     <HardwareStatusProperty
                         icon={<Palette/>}
                         name={"Saturation"}
-                        value={hardwareGroup.records["colorSaturation"]}
+                        path={hardwareGroup.path + "/colorSaturation"}
                         suffix={"%"}
                     />
                     <HardwareStatusProperty
                         icon={<Palette/>}
                         name={"Brightness"}
-                        value={hardwareGroup.records["colorBrightness"]}
+                        path={hardwareGroup.path + "/colorBrightness"}
                         suffix={"%"}
                     />
 
                     <HardwareStatusProperty
                         icon={<Expand/>}
                         name={"Extended"}
-                        value={hardwareGroup.records["isExtended"]}
+                        path={hardwareGroup.path + "/isExtended"}
                     />
                 </List>
 
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isOverTemp"] === "1"}
+                    path={hardwareGroup.path + "/isOverTemp"}
                     text="Over temperature limit"
                 />
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isOverCurrent"] === "1"}
+                    path={hardwareGroup.path + "/isOverCurrent"}
                     text="Over current limit"
                 />
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isDriverFault"] === "1"}
+                    path={hardwareGroup.path + "/isDriverFault"}
                     text="H-bridge driver fault"
                 />
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isDriverOverCurrent"] === "1"}
+                    path={hardwareGroup.path + "/isDriverOverCurrent"}
                     text="H-bridge over current"
                 />
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isErrored"] === "1"}
+                    path={hardwareGroup.path + "/isErrored"}
                     text="Unknown error"
                 />
                 <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isConnected"] === "0"}
-                    text="Device disconnected"
-                />
-
-                <HardwareStatusAlert
-                    isActive={hardwareGroup.records["isCalibrating"] === "1"}
+                    path={hardwareGroup.path + "/isCalibrating"}
                     text="Currently calibrating..."
                     severity={"info"}
+                />
+                
+                <HardwareStatusAlert
+                    isInverted
+                    path={hardwareGroup.path + "/isConnected"}
+                    text="Device disconnected"
                 />
             </CardContent>
         </Card>

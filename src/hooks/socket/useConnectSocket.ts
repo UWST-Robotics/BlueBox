@@ -4,10 +4,7 @@ import useSocket from "./useSocket.ts";
 import React from "react";
 import NetworkTableRecord from "../../types/NetworkTableRecord.ts";
 import {logAtom} from "../log/useLog.ts";
-import {serialPortsAtom} from "../serialPorts/useSerialPorts.ts";
-import SerialPortInfo from "../../types/SerialPortInfo.ts";
-import {networkTableValueAtomFamily} from "../networkTable/useNetworkTableValue.ts";
-import {resetNetworkTableAtom} from "../networkTable/actions/useResetNetworkTable.ts";
+import {updateNTValueAtomFamily} from "../networkTable/actions/useUpdateNTValue.ts";
 
 export default function useSocketConnection() {
     const socket = useSocket();
@@ -29,19 +26,12 @@ export default function useSocketConnection() {
         socket.on("setAllRecords", (records: NetworkTableRecord[]) => {
             console.log("Received all records from server");
             records.forEach((record) => {
-                const valueAtom = networkTableValueAtomFamily(record.key);
-                primaryStore.set(valueAtom, record.value);
+                primaryStore.set(updateNTValueAtomFamily(record.key), record.value);
             });
         });
 
         socket.on("updateRecord", (record: NetworkTableRecord) => {
-            const valueAtom = networkTableValueAtomFamily(record.key);
-            primaryStore.set(valueAtom, record.value);
-        });
-
-        socket.on("deleteRecord", (key: string) => {
-            const valueAtom = networkTableValueAtomFamily(key);
-            primaryStore.set(valueAtom, undefined);
+            primaryStore.set(updateNTValueAtomFamily(record.key), record.value);
         });
 
         socket.on("log", (message: string) => {
@@ -52,16 +42,6 @@ export default function useSocketConnection() {
                     message: message
                 }];
             });
-        });
-
-        socket.on("resetTable", () => {
-            console.log("Server requested table reset");
-            primaryStore.set(resetNetworkTableAtom);
-        });
-
-        socket.on("serialPorts", (ports: SerialPortInfo[]) => {
-            console.log("Received serial ports from server");
-            primaryStore.set(serialPortsAtom, ports);
         });
 
         socket.connect();

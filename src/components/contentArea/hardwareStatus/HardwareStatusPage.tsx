@@ -2,13 +2,11 @@ import {HARDWARE_INFO_GROUP} from "../../../types/GroupNames.ts";
 import useCurrentTab from "../../../hooks/navigation/currentTab.ts";
 import {Box} from "@mui/material";
 import HardwareStatusCard from "./HardwareStatusCard.tsx";
-import useNetworkTableGroup from "../../../hooks/networkTable/useNetworkTableGroup.ts";
+import useNTGroupInfo from "../../../hooks/networkTable/useNTGroupInfo.ts";
 
 export default function HardwareStatusPage() {
     const [currentTab] = useCurrentTab();
-    const hardwareGroup = useNetworkTableGroup(HARDWARE_INFO_GROUP);
-
-    const hardwareChildKeys = Object.keys(hardwareGroup?.children ?? {});
+    const hardwareGroup = useNTGroupInfo(HARDWARE_INFO_GROUP);
 
     if (currentTab !== "hardware")
         return null;
@@ -24,10 +22,10 @@ export default function HardwareStatusPage() {
                 overflowY: "auto"
             }}
         >
-            {hardwareChildKeys.map((key) => (
+            {hardwareGroup.children.map((child) => (
                 <HardwareStatusCard
-                    key={key}
-                    hardwareGroup={hardwareGroup.children[key]}
+                    key={child.path}
+                    hardwareGroup={child}
                 />
             ))}
         </Box>

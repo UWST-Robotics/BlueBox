@@ -1,10 +1,10 @@
 import {atom} from "jotai";
 import {valuesOverTimeAtom} from "../useValuesOverTime.ts";
-import NetworkTableValue from "../../../types/NetworkTableValue.ts";
+import NTValue from "../../../types/nt/NTValue.ts";
 
 export interface UpdateValueOverTimeProps {
     path: string;
-    value: NetworkTableValue;
+    value: NTValue;
 }
 
 export const MAX_VALUES_OVER_TIME = 1000;

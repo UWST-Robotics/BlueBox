@@ -1,6 +1,6 @@
-import NetworkTableValue from "../types/NetworkTableValue.ts";
+import NTValue from "../types/nt/NTValue.ts";
 
-export default function parseNetworkValueToNumber(value?: NetworkTableValue) {
+export default function parseNetworkValueToNumber(value?: NTValue) {
     if (value === undefined)
         return undefined;
 

@@ -1,13 +1,13 @@
 import {ListItemButton, ListItemText} from "@mui/material";
 import ColoredListItem from "../../common/ColoredListItem.tsx";
-import NetworkTableValue from "../../../types/NetworkTableValue.ts";
+import NTValue from "../../../types/nt/NTValue.ts";
 import networkValueToString from "../../../utils/networkValueToString.ts";
 import useSelectPath from "../../../hooks/selectedPath/actions/useSelectPath.ts";
 
 export interface SceneGraphItemProps {
     name: string;
     path: string;
-    value: NetworkTableValue;
+    value: NTValue;
     depth?: number;
 }
 
@@ -19,6 +19,8 @@ export default function SceneGraphItem(props: SceneGraphItemProps) {
     const valueText = networkValueToString(value);
     const depth = props.depth || 0;
 
+    if (value === undefined || value === null)
+        return null;
     return (
         <ColoredListItem
             intent="success"

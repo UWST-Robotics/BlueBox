@@ -1,28 +1,28 @@
-import NetworkTableGroup from "../../../../../types/NetworkTableGroup.ts";
-import parseNetworkValueToNumber from "../../../../../utils/parseNetworkValueToNumber.ts";
-import React from "react";
+import NTGroupInfo from "../../../../../types/nt/NTGroupInfo.ts";
 import {Circle, Group, Line} from "react-konva";
+import useNTValue from "../../../../../hooks/networkTable/useNTValue.ts";
 
 export interface NetworkPoseRendererProps {
-    lineGroup: NetworkTableGroup;
+    lineGroup: NTGroupInfo;
 }
 
 export default function NetworkLineRenderer(props: NetworkPoseRendererProps) {
     const {lineGroup} = props;
+    const color = useNTValue(lineGroup.path + "/color");
 
-    const color = lineGroup.records["color"];
-    const points = React.useMemo(() => {
-        const pointKeys = Object.keys(lineGroup?.children ?? {});
-        return pointKeys.map((key) => {
-            const point = lineGroup.children[key];
-            return [
-                parseNetworkValueToNumber(point.records["x"]) ?? 0,
-                parseNetworkValueToNumber(point.records["y"]) ?? 0
-            ];
-        });
-    }, [lineGroup]);
+    // const points = React.useMemo(() => {
+    //     const pointKeys = Object.keys(lineGroup?.children ?? {});
+    //     return pointKeys.map((key) => {
+    //         const point = lineGroup.childGroups[key];
+    //         return [
+    //             parseNetworkValueToNumber(point.records["x"]) ?? 0,
+    //             parseNetworkValueToNumber(point.records["y"]) ?? 0
+    //         ];
+    //     });
+    // }, [lineGroup]);
 
-    console.log(points);
+    // TODO: Fix this
+    const points: number[][] = [];
 
     return (
         <Group>

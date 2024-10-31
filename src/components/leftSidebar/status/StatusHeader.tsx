@@ -4,18 +4,18 @@ import useSocketStatus from "../../../hooks/socket/useSocketStatus.ts";
 import {ROBOT_GROUP, SERVER_GROUP} from "../../../types/GroupNames.ts";
 import BatteryIndicator from "./BatteryIndicator.tsx";
 import SerialIndicator from "./SerialIndicator.tsx";
-import useNetworkTableGroup from "../../../hooks/networkTable/useNetworkTableGroup.ts";
+import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
 
 export default function StatusHeader() {
     const socketStatus = useSocketStatus();
-    const robotGroup = useNetworkTableGroup(ROBOT_GROUP);
-    const serverGroup = useNetworkTableGroup(SERVER_GROUP);
+    const _serialStatus = useNTValue(SERVER_GROUP + "/serialStatus");
+    const _robotStatus = useNTValue(SERVER_GROUP + "/heartbeat");
+    const batteryVoltage = useNTValue(ROBOT_GROUP + "/batteryVoltage");
+    const batteryCurrent = useNTValue(ROBOT_GROUP + "/batteryCurrent");
+    const batteryTemperature = useNTValue(ROBOT_GROUP + "/batteryTemperature");
 
-    const serialStatus = serverGroup?.records["serialStatus"] ?? "Unknown";
-    const robotStatus = serverGroup?.records["heartbeat"] ?? "Unknown";
-    const batteryVoltage = robotGroup?.records["batteryVoltage"];
-    const batteryCurrent = robotGroup?.records["batteryCurrent"];
-    const batteryTemperature = robotGroup?.records["batteryTemperature"];
+    const serialStatus = _serialStatus ?? "Unknown";
+    const robotStatus = _robotStatus ?? "Unknown";
 
     return (
         <Box

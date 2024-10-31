@@ -1,6 +1,6 @@
-import NetworkTableValue from "./NetworkTableValue.ts";
+import NTValue from "./nt/NTValue.ts";
 
 export default interface NetworkTableRecord {
     key: string;
-    value: NetworkTableValue;
+    value: NTValue;
 }

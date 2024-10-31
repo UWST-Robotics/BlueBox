@@ -3,14 +3,19 @@ import useValuesOverTime from "../../../hooks/valueOverTime/useValuesOverTime.ts
 import useSelectedPathStats from "../../../hooks/valueOverTime/useSelectedPathStats.ts";
 import useCurrentTime from "../../../hooks/common/useCurrentTime.ts";
 import useSelectedPath from "../../../hooks/selectedPath/useSelectedPath.ts";
+import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
+import parseNetworkValueToNumber from "../../../utils/parseNetworkValueToNumber.ts";
 
 const TIME_WINDOW = 10000;
 
 export default function SelectedValueChart() {
     const selectedPath = useSelectedPath();
+    const _currentValue = useNTValue(selectedPath || "");
+    const currentValue = parseNetworkValueToNumber(_currentValue);
     const [valuesOverTime] = useValuesOverTime(selectedPath || "");
     const [min, max, average] = useSelectedPathStats();
     const currentTime = useCurrentTime(1000);
+
 
     // Time Functions
     const formatTime = (time: number) => {
@@ -87,6 +92,15 @@ export default function SelectedValueChart() {
                     strokeDasharray={"3 3"}
                     label={{
                         value: `Avg: ${average.toFixed(2)}`,
+                        position: "insideBottomRight"
+                    }}
+                />
+                <ReferenceLine
+                    y={currentValue}
+                    stroke={"#fff"}
+                    strokeDasharray={"3 3"}
+                    label={{
+                        value: `Current: ${currentValue?.toFixed(2)}`,
                         position: "insideBottomRight"
                     }}
                 />

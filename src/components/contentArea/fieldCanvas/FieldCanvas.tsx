@@ -2,12 +2,14 @@ import {Group, Layer, Rect, Stage} from "react-konva";
 import useWindowSize from "../../../hooks/common/useWindowSize.ts";
 import GridRenderer from "./canvasRenderers/GridRenderer.tsx";
 import React from "react";
-import NetworkGroupRenderer from "./canvasRenderers/NetworkGroupRenderer.tsx";
 import {LINES_GROUP, POSE_GROUP} from "../../../types/GroupNames.ts";
 import NetworkPoseRenderer from "./canvasRenderers/poseRenderer/NetworkPoseRenderer.tsx";
 import NetworkLineRenderer from "./canvasRenderers/lineRenderer/NetworkLineRenderer.tsx";
+import useNTGroupInfo from "../../../hooks/networkTable/useNTGroupInfo.ts";
 
 export default function FieldCanvas() {
+    const linesGroupInfo = useNTGroupInfo(LINES_GROUP);
+    const posesGroupInfo = useNTGroupInfo(POSE_GROUP);
     const [windowWidth, windowHeight] = useWindowSize();
 
     const canvasSize = React.useMemo(() => {
@@ -57,16 +59,14 @@ export default function FieldCanvas() {
                     scaleY={canvasSize / 144}
                 >
                     {/* Lines */}
-                    <NetworkGroupRenderer
-                        groupName={LINES_GROUP}
-                        renderChild={(group) => <NetworkLineRenderer key={group.path} lineGroup={group}/>}
-                    />
+                    {linesGroupInfo?.children.map((group) => (
+                        <NetworkLineRenderer key={group.path} lineGroup={group}/>
+                    ))}
 
                     {/* Poses */}
-                    <NetworkGroupRenderer
-                        groupName={POSE_GROUP}
-                        renderChild={(group) => <NetworkPoseRenderer key={group.path} poseGroup={group}/>}
-                    />
+                    {posesGroupInfo?.children.map((group) => (
+                        <NetworkPoseRenderer key={group.path} poseGroup={group}/>
+                    ))}
                 </Group>
             </Layer>
         </Stage>

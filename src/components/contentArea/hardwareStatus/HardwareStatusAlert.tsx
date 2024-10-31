@@ -1,15 +1,18 @@
 import {Alert, AlertColor} from "@mui/material";
-import NetworkTableValue from "../../../types/NetworkTableValue.ts";
+import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
 
 export interface HardwareStatusAlertProps {
-    isActive: NetworkTableValue;
+    path: string;
     text: string;
     severity?: AlertColor;
+    isInverted?: boolean;
 }
 
 export default function HardwareStatusAlert(props: HardwareStatusAlertProps) {
-    const {isActive, text} = props;
+    const value = useNTValue(props.path);
+    const {isInverted, text} = props;
 
+    const isActive = isInverted ? Boolean(!value) : Boolean(value);
     if (!isActive)
         return null;
     return (

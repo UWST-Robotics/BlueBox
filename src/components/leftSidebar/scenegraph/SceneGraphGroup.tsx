@@ -1,21 +1,21 @@
 import {Collapse, Divider, IconButton, List, ListItemButton, ListItemText} from "@mui/material";
-import NetworkTableGroup from "../../../types/NetworkTableGroup.ts";
+import NTGroupInfo from "../../../types/nt/NTGroupInfo.ts";
 import SceneGraphItem from "./SceneGraphItem.tsx";
 import React from "react";
 import AnimatedCaretIcon from "../../common/AnimatedCaretIcon.tsx";
 import ColoredListItem from "../../common/ColoredListItem.tsx";
+import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
 
 export interface SceneGraphGroupProps {
-    networkGroup: NetworkTableGroup;
+    groupInfo: NTGroupInfo;
     depth?: number;
     isRoot?: boolean;
 }
 
 export default function SceneGraphGroup(props: SceneGraphGroupProps) {
+    const value = useNTValue(props.groupInfo.path);
     const [isCollapsed, setIsCollapsed] = React.useState(!props.isRoot);
 
-    const recordKeys = Object.keys(props.networkGroup.records);
-    const childrenKeys = Object.keys(props.networkGroup.children);
     const depth = props.depth || 0;
 
     return (
@@ -43,7 +43,7 @@ export default function SceneGraphGroup(props: SceneGraphGroupProps) {
                         }}
                     >
                         <ListItemText
-                            primary={props.networkGroup.name}
+                            primary={props.groupInfo.name}
                         />
                     </ListItemButton>
                 </ColoredListItem>
@@ -52,22 +52,20 @@ export default function SceneGraphGroup(props: SceneGraphGroupProps) {
 
             <Collapse in={!isCollapsed} timeout="auto" unmountOnExit>
                 <List disablePadding>
-                    {childrenKeys.map((childKey) => (
+                    {props.groupInfo.children.map((child) => (
                         <SceneGraphGroup
-                            key={props.networkGroup.children[childKey].path}
-                            networkGroup={props.networkGroup.children[childKey]}
+                            key={child.path}
+                            groupInfo={child}
                             depth={depth + 1}
                         />
                     ))}
-                    {recordKeys.map((recordKey) => (
-                        <SceneGraphItem
-                            key={recordKey}
-                            depth={depth + 1}
-                            name={recordKey}
-                            path={props.networkGroup.path + "/" + recordKey}
-                            value={props.networkGroup.records[recordKey]}
-                        />
-                    ))}
+
+                    <SceneGraphItem
+                        depth={depth + 1}
+                        name={props.groupInfo.name}
+                        path={props.groupInfo.path}
+                        value={value}
+                    />
                 </List>
                 <Divider/>
             </Collapse>

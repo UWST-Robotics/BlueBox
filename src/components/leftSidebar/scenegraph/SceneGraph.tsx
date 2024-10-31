@@ -1,10 +1,9 @@
 import {Box, List} from "@mui/material";
+import useNTGroupInfoRoot from "../../../hooks/networkTable/useNTGroupInfoRoot.ts";
 import SceneGraphGroup from "./SceneGraphGroup.tsx";
-import useNetworkTableRoot from "../../../hooks/networkTable/useNetworkTableRoot.ts";
 
 export default function SceneGraph() {
-    const rootGroup = useNetworkTableRoot();
-
+    const rootInfo = useNTGroupInfoRoot();
     return (
         <Box
             sx={{
@@ -20,7 +19,7 @@ export default function SceneGraph() {
                 }}
             >
                 <SceneGraphGroup
-                    networkGroup={rootGroup}
+                    groupInfo={rootInfo}
                     isRoot
                 />
             </List>

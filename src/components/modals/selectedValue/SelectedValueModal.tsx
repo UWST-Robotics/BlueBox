@@ -1,17 +1,15 @@
 import useSelectedPath from "../../../hooks/selectedPath/useSelectedPath.ts";
-import useNetworkTableValue from "../../../hooks/networkTable/useNetworkTableValue.ts";
 import {Box, Modal} from "@mui/material";
 import useSelectPath from "../../../hooks/selectedPath/actions/useSelectPath.ts";
 import SelectedValueChart from "./SelectedValueChart.tsx";
 
 export default function SelectedValueModal() {
     const selectedPath = useSelectedPath();
-    const selectedValue = useNetworkTableValue(selectedPath || "");
     const selectPath = useSelectPath();
 
     return (
         <Modal
-            open={selectedValue !== undefined}
+            open={selectedPath !== undefined}
             onClose={() => selectPath(undefined)}
         >
             <Box

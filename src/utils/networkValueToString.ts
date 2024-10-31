@@ -1,6 +1,6 @@
-import NetworkTableValue from "../types/NetworkTableValue.ts";
+import NTValue from "../types/nt/NTValue.ts";
 
-export default function networkValueToString(value: NetworkTableValue) {
+export default function networkValueToString(value: NTValue) {
     if (typeof value === "string")
         return value;
     else if (typeof value === "number")
