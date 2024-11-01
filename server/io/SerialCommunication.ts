@@ -1,11 +1,11 @@
 import {SerialPort} from "serialport";
 import Logger from "../common/Logger";
 import {DelimiterParser} from "@serialport/parser-delimiter";
-import NetworkTable from "../NetworkTable";
+import NetworkTable from "../nt/NetworkTable";
 import SocketCommunication from "./SocketCommunication";
 import Heartbeat from "../common/Heartbeat";
-import SerialPortType from "../types/SerialPortInfo";
-import NetworkTableValue from "../types/NetworkTableValue";
+import NTValue from "../types/NTValue";
+import ServerNT from "../nt/ServerNT";
 
 export default class SerialCommunication {
     static HEARTBEAT_INTERVAL = 500;
@@ -24,7 +24,7 @@ export default class SerialCommunication {
 
         // Create Child Processes
         this.heartbeat = new Heartbeat(SerialCommunication.HEARTBEAT_INTERVAL, () => {
-            SerialCommunication.updateNetworkTable("heartbeat", "offline");
+            ServerNT.updateRecord("isRobotOnline", false);
         });
 
 
@@ -48,8 +48,8 @@ export default class SerialCommunication {
         // Handle Open
         this.serialPort.on("open", () => {
             Logger.info("Serial port opened on " + this.serialPort.path);
-            SerialCommunication.updateNetworkTable("serialStatus", "open");
-            SerialCommunication.updateNetworkTable("heartbeat", "offline");
+            ServerNT.updateRecord("isSerialConnected", true);
+            ServerNT.updateRecord("isRobotOnline", false);
         });
 
         // Handle Errors
@@ -59,24 +59,10 @@ export default class SerialCommunication {
 
         // Handle Close
         this.serialPort.on("close", () => {
-            Logger.info("Serial port closed");
-            SerialCommunication.updateNetworkTable("serialStatus", "closed");
-            SerialCommunication.updateNetworkTable("heartbeat", "offline");
+            Logger.info(`Serial port closed on ${this.serialPort.path}`);
+            ServerNT.updateRecord("isSerialConnected", false);
+            ServerNT.updateRecord("isRobotOnline", false);
         });
-    }
-
-    /**
-     * Update the status of a value in the network table
-     * @param key - The key of the value to update
-     * @param value - The new value
-     */
-    static updateNetworkTable(key: string, value: string) {
-        const record = {
-            key: `_server/${key}`,
-            value
-        };
-        NetworkTable.addOrUpdate(record);
-        SocketCommunication.emitUpdateRecord(record);
     }
 
     /**
@@ -85,27 +71,6 @@ export default class SerialCommunication {
     close() {
         if (this.serialPort.isOpen)
             this.serialPort.close();
-    }
-
-    /**
-     * Get all available serial ports
-     * @returns {Promise<SerialPortType[]>}
-     */
-    async getAllPorts() {
-        return new Promise<SerialPortType[]>((resolve) => {
-            SerialPort.list().then((ports) => {
-                resolve(ports.map((port) => ({
-                    isActive: port.path === this.serialPort.path,
-                    path: port.path,
-                    manufacturer: port.manufacturer,
-                    serialNumber: port.serialNumber,
-                    pnpID: port.pnpId,
-                    locationID: port.locationId,
-                    productID: port.productId,
-                    vendorID: port.vendorId
-                })));
-            });
-        });
     }
 
     /**
@@ -125,7 +90,7 @@ export default class SerialCommunication {
 
                 // Parse the value
                 const lowerCaseValue = stringValue.toLowerCase();
-                let value: NetworkTableValue = stringValue;
+                let value: NTValue = stringValue;
                 if (lowerCaseValue === "true" || lowerCaseValue === "false")
                     value = stringValue === "true";
                 else if (!isNaN(parseFloat(stringValue)))
@@ -140,8 +105,9 @@ export default class SerialCommunication {
 
             // Reset Table
             else if (data.startsWith("__NTRESET__")) {
-                NetworkTable.reset();
-                SocketCommunication.emitSetAllRecords([]);
+                // Reset the network table
+                NetworkTable.records = ServerNT.getAllRecords();
+                SocketCommunication.emitSetAllRecords(NetworkTable.records);
             }
 
             // Heartbeat
@@ -150,7 +116,7 @@ export default class SerialCommunication {
                 this.heartbeat.beat();
 
                 // Update the network table
-                SerialCommunication.updateNetworkTable("heartbeat", "online");
+                ServerNT.updateRecord("isRobotOnline", true);
             }
 
             // Normal Log

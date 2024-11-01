@@ -1,9 +1,10 @@
 import {atomFamily} from "jotai/utils";
-import {Atom, atom, useAtomValue} from "jotai";
+import {atom, useAtomValue} from "jotai";
 import NTValue from "../../types/nt/NTValue.ts";
 
 // Atoms
-export const ntValueAtomFamily = atomFamily<string, Atom<NTValue>>(() => atom<NTValue>(undefined));
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const ntValueAtomFamily = atomFamily((_: string) => atom<NTValue>(undefined));
 
 // Hooks
 export default function useNTValue(path: string) {

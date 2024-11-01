@@ -1,38 +1,21 @@
-import {
-    IconButton,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Popover,
-    Typography
-} from "@mui/material";
+import {IconButton, List, Popover, Typography} from "@mui/material";
 import React from "react";
-import useSerialPorts from "../../../hooks/serialPorts/useSerialPorts.ts";
-import useSocket from "../../../hooks/socket/useSocket.ts";
-import {SettingsEthernet, SettingsInputHdmi} from "@mui/icons-material";
-import SerialPortInfo from "../../../types/SerialPortInfo.ts";
+import {SettingsInputHdmi} from "@mui/icons-material";
 import useSocketStatus from "../../../hooks/socket/useSocketStatus.ts";
+import useNTGroupInfo from "../../../hooks/networkTable/useNTGroupInfo.ts";
+import {SERVER_GROUP} from "../../../types/GroupNames.ts";
+import SerialIndicatorOption from "./SerialIndicatorOption.tsx";
 
 export default function SerialIndicator() {
-    const ports = useSerialPorts();
+    const serialPorts = useNTGroupInfo(SERVER_GROUP + "/serialPorts");
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-    const socket = useSocket();
     const socketStatus = useSocketStatus();
-
-    const selectPort = (port: SerialPortInfo) => {
-        socket.emit("setSerialPort", port.path);
-    }
 
     return (
         <>
             <IconButton
                 disabled={socketStatus !== "connected"}
-                onClick={(e) => {
-                    setAnchorEl(e.currentTarget);
-                    socket.emit("getSerialPorts");
-                }}
+                onClick={(e) => setAnchorEl(e.currentTarget)}
             >
                 <SettingsInputHdmi/>
             </IconButton>
@@ -51,27 +34,14 @@ export default function SerialIndicator() {
                 }}
             >
                 <List>
-                    {ports.map((port) => (
-                        <ListItem key={port.path} disablePadding>
-                            <ListItemButton
-                                dense
-                                selected={port.isActive}
-                                onClick={() => selectPort(port)}
-                            >
-                                <ListItemIcon sx={{minWidth: 40}}>
-                                    <SettingsEthernet
-                                        color={port.isActive ? "inherit" : "disabled"}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={port.path}
-                                    secondary={`${port.manufacturer ?? "N/A"} · ${port.locationID ?? "N/A"}`}
-                                />
-                            </ListItemButton>
-                        </ListItem>
+                    {serialPorts?.children.map((port) => (
+                        <SerialIndicatorOption
+                            key={port.path}
+                            portPath={port.path}
+                        />
                     ))}
 
-                    {ports.length === 0 && (
+                    {serialPorts?.children.length == 0 && (
                         <Typography
                             sx={{margin: 1, color: "text.disabled"}}
                         >

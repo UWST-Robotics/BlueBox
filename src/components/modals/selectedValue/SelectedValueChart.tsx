@@ -13,7 +13,7 @@ export default function SelectedValueChart() {
     const currentValue = parseNetworkValueToNumber(_currentValue);
     const [valuesOverTime] = useValuesOverTime(selectedPath || "");
     const [min, max, average] = useSelectedPathStats();
-    const currentTime = useCurrentTime(1000);
+    const currentTime = useCurrentTime(50);
 
 
     // Time Functions
@@ -49,7 +49,7 @@ export default function SelectedValueChart() {
 
                 {/* Values over Time */}
                 <Line
-                    type={"step"}
+                    type={"stepAfter"}
                     dataKey={"value"}
                     isAnimationActive={false}
                     stroke={"#59c"}

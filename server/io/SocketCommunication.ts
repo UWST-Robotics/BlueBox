@@ -1,9 +1,10 @@
 import {createServer} from "http";
 import {Server, Socket} from "socket.io";
-import NetworkTable from "../NetworkTable";
+import NetworkTable from "../nt/NetworkTable";
 import Logger from "../common/Logger";
-import NetworkTableRecord from "../types/NetworkTableRecord";
+import NTRecord from "../types/NTRecord";
 import SerialCommunication from "./SerialCommunication";
+import SerialPortNT from "../nt/SerialPortNT";
 
 export default class SocketCommunication {
     static serialComms = new SerialCommunication("COM6");
@@ -14,6 +15,10 @@ export default class SocketCommunication {
         }
     });
 
+    /**
+     * Called when a new user connects
+     * @param socket - The socket of the user
+     */
     static onConnection(socket: Socket) {
         Logger.client("New user connected");
 
@@ -22,24 +27,11 @@ export default class SocketCommunication {
             socket.emit("setAllRecords", NetworkTable.records);
         });
 
-        socket.on("getSerialPorts", () => {
-            SocketCommunication.serialComms.getAllPorts().then((ports) => {
-                Logger.client(`Sending ${ports.length} serial ports to user`);
-                // TODO: Fix Serial Port Selection
-                //SocketCommunication.emitSerialPorts(ports);
-            }).catch(Logger.error);
-        });
-
         socket.on("setSerialPort", (port: string) => {
-            Logger.info(`Setting serial port to ${port}`);
-
+            Logger.client(`Setting serial port to ${port}`);
             SocketCommunication.serialComms.close();
             SocketCommunication.serialComms = new SerialCommunication(port);
-            SocketCommunication.serialComms.getAllPorts().then((ports) => {
-                Logger.client(`Sending ${ports.length} serial ports to user`);
-                // TODO: Fix Serial Port Selection
-                //SocketCommunication.emitSerialPorts(ports);
-            }).catch(Logger.error);
+            SerialPortNT.updateAllPorts().catch(console.error);
         });
 
         socket.on("disconnect", () => {
@@ -51,11 +43,11 @@ export default class SocketCommunication {
         });
     }
 
-    static emitSetAllRecords(records: NetworkTableRecord[]) {
+    static emitSetAllRecords(records: NTRecord[]) {
         this.io.emit("setAllRecords", records);
     }
 
-    static emitUpdateRecord(record: NetworkTableRecord) {
+    static emitUpdateRecord(record: NTRecord) {
         this.io.emit("updateRecord", record);
     }
 

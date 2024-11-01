@@ -5,6 +5,8 @@ import React from "react";
 import NetworkTableRecord from "../../types/NetworkTableRecord.ts";
 import {logAtom} from "../log/useLog.ts";
 import {updateNTValueAtomFamily} from "../networkTable/actions/useUpdateNTValue.ts";
+import SerialPortInfo from "../../types/SerialPortInfo.ts";
+import {serialPortsAtom} from "../serialPorts/useSerialPorts.ts";
 
 export default function useSocketConnection() {
     const socket = useSocket();
@@ -42,6 +44,12 @@ export default function useSocketConnection() {
                     message: message
                 }];
             });
+        });
+
+        socket.on("serialPorts", (ports: SerialPortInfo[]) => {
+            console.log("Received serial ports from server");
+            // TODO: Fix Serial Port Selection
+            primaryStore.set(serialPortsAtom, ports);
         });
 
         socket.connect();

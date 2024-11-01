@@ -8,14 +8,11 @@ import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
 
 export default function StatusHeader() {
     const socketStatus = useSocketStatus();
-    const _serialStatus = useNTValue(SERVER_GROUP + "/serialStatus");
-    const _robotStatus = useNTValue(SERVER_GROUP + "/heartbeat");
+    const serialStatus = useNTValue(SERVER_GROUP + "/isSerialConnected");
+    const robotStatus = useNTValue(SERVER_GROUP + "/isRobotConnected");
     const batteryVoltage = useNTValue(ROBOT_GROUP + "/batteryVoltage");
     const batteryCurrent = useNTValue(ROBOT_GROUP + "/batteryCurrent");
     const batteryTemperature = useNTValue(ROBOT_GROUP + "/batteryTemperature");
-
-    const serialStatus = _serialStatus ?? "Unknown";
-    const robotStatus = _robotStatus ?? "Unknown";
 
     return (
         <Box
@@ -26,21 +23,21 @@ export default function StatusHeader() {
         >
             <StatusBanner
                 type={"Socket"}
-                text={socketStatus === "connected" ? "Connected" : "Disconnected"}
-                color={socketStatus === "connected" ? "green" : "red"}
+                text={socketStatus ? "Connected" : "Disconnected"}
+                color={socketStatus ? "green" : "red"}
             />
 
             {socketStatus === "connected" && (
                 <>
                     <StatusBanner
                         type={"Serial"}
-                        text={serialStatus === "open" ? "Open" : "Closed"}
-                        color={serialStatus === "open" ? "green" : "red"}
+                        text={serialStatus ? "Open" : "Closed"}
+                        color={serialStatus ? "green" : "red"}
                     />
                     <StatusBanner
                         type={"Robot"}
-                        text={robotStatus === "online" ? "Enabled" : "Disabled"}
-                        color={robotStatus === "online" ? "green" : "red"}
+                        text={robotStatus ? "Enabled" : "Disabled"}
+                        color={robotStatus ? "green" : "red"}
                     />
                 </>
             )}
