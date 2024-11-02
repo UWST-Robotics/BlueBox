@@ -9,8 +9,8 @@
     "dev:client": "vite",
     "build": "yarn build:client && yarn build:server",
     "build:client": "vite build",
-    "build:server": "tsc --project tsconfig.server.json",
-    "start": "node dist/index.js",
+    "build:server": "esbuild src/index.ts --platform=node --bundle --outfile=dist/index.cjs --external:@serialport",
+    "start": "node dist/index.cjs",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "@types/serialport": "^8.0.5",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "concurrently": "^9.0.1",
+    "esbuild": "^0.24.0",
     "eslint": "^9.13.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.13",
