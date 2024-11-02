@@ -1,5 +1,5 @@
 import Chalk from "chalk";
-import BlueBox from "../BlueBox";
+import BlueBox from "../BlueBox.js";
 
 export default class Logger {
     static log(prefix: string, data: string) {

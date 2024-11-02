@@ -5,6 +5,7 @@ import HardwareStatusPage from "./contentArea/hardwareStatus/HardwareStatusPage.
 import LogOutputPage from "./contentArea/logOutput/LogOutputPage.tsx";
 import FieldCanvasPage from "./contentArea/fieldCanvas/FieldCanvasPage.tsx";
 import SelectedValueModal from "./modals/selectedValue/SelectedValueModal.tsx";
+import React from "react";
 
 export default function Content() {
     return (

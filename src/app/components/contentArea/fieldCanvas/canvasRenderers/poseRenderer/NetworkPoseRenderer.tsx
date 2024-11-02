@@ -2,6 +2,7 @@ import NTGroupInfo from "../../../../../types/nt/NTGroupInfo.ts";
 import PoseRenderer from "./PoseRenderer.tsx";
 import parseNetworkValueToNumber from "../../../../../utils/parseNetworkValueToNumber.ts";
 import useNTValue from "../../../../../hooks/networkTable/useNTValue.ts";
+import React from "react";
 
 export interface NetworkPoseRendererProps {
     poseGroup: NTGroupInfo;

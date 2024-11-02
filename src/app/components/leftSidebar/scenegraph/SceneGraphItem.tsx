@@ -3,6 +3,7 @@ import ColoredListItem from "../../common/ColoredListItem.tsx";
 import NTValue from "../../../types/nt/NTValue.ts";
 import networkValueToString from "../../../utils/networkValueToString.ts";
 import useSelectPath from "../../../hooks/selectedPath/actions/useSelectPath.ts";
+import React from "react";
 
 export interface SceneGraphItemProps {
     name: string;

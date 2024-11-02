@@ -4,6 +4,7 @@ import {createTheme} from "@mui/material/styles";
 import {Provider as StateProvider} from "jotai";
 import primaryStore from "../hooks/primaryStore.ts";
 import useSocketConnection from "../hooks/socket/useConnectSocket.ts";
+import React from "react";
 
 // MUI theme
 const darkTheme = createTheme({

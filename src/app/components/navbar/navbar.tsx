@@ -1,6 +1,7 @@
 import {Paper, Tab, Tabs} from "@mui/material";
 import useCurrentTab from "../../hooks/navigation/currentTab.ts";
 import {Map, Notes, SettingsEthernet} from "@mui/icons-material";
+import React from "react";
 
 export default function Navbar() {
     const [tab, setTab] = useCurrentTab();

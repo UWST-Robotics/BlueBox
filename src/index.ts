@@ -1,3 +1,3 @@
-import BlueBox from "./lib/BlueBox";
+import BlueBox from "./lib/BlueBox.js";
 
 BlueBox.listen();

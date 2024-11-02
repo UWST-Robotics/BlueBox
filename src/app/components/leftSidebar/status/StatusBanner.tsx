@@ -1,5 +1,6 @@
 import {Box} from "@mui/material";
 import {Circle} from '@mui/icons-material';
+import React from "react";
 
 export interface StatusBannerProps {
     type: string;

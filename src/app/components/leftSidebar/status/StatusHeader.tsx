@@ -5,11 +5,12 @@ import {ROBOT_GROUP, SERVER_GROUP} from "../../../types/GroupNames.ts";
 import BatteryIndicator from "./BatteryIndicator.tsx";
 import SerialIndicator from "./SerialIndicator.tsx";
 import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
+import React from "react";
 
 export default function StatusHeader() {
     const socketStatus = useSocketStatus();
     const serialStatus = useNTValue(SERVER_GROUP + "/isSerialConnected");
-    const robotStatus = useNTValue(SERVER_GROUP + "/isRobotConnected");
+    const robotStatus = useNTValue(SERVER_GROUP + "/isRobotOnline");
     const batteryVoltage = useNTValue(ROBOT_GROUP + "/batteryVoltage");
     const batteryCurrent = useNTValue(ROBOT_GROUP + "/batteryCurrent");
     const batteryTemperature = useNTValue(ROBOT_GROUP + "/batteryTemperature");

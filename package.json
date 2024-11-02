@@ -1,7 +1,8 @@
 {
   "name": "bluebox",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "type": "module",
   "scripts": {
     "dev": "concurrently --raw \"yarn dev:server\" \"yarn dev:client\"",
     "dev:server": "tsx watch --tsconfig tsconfig.server.json src/index.ts",

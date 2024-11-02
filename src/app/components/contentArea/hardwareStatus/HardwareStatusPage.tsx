@@ -3,6 +3,7 @@ import useCurrentTab from "../../../hooks/navigation/currentTab.ts";
 import {Box} from "@mui/material";
 import HardwareStatusCard from "./HardwareStatusCard.tsx";
 import useNTGroupInfo from "../../../hooks/networkTable/useNTGroupInfo.ts";
+import React from "react";
 
 export default function HardwareStatusPage() {
     const [currentTab] = useCurrentTab();

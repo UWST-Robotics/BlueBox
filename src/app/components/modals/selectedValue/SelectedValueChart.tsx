@@ -6,6 +6,7 @@ import useSelectedPath from "../../../hooks/selectedPath/useSelectedPath.ts";
 import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
 import parseNetworkValueToNumber from "../../../utils/parseNetworkValueToNumber.ts";
 import {MAX_TIME_WINDOW} from "../../../hooks/valueOverTime/actions/useUpdateValueOverTime.ts";
+import React from "react";
 
 export default function SelectedValueChart() {
     const selectedPath = useSelectedPath();

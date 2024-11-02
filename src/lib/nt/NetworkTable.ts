@@ -1,4 +1,4 @@
-import NTRecord from "../types/NTRecord";
+import NTRecord from "../types/NTRecord.js";
 
 export default class NetworkTable {
     records: NTRecord[] = [];

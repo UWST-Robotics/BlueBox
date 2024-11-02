@@ -1,6 +1,7 @@
 import NTGroupInfo from "../../../../../types/nt/NTGroupInfo.ts";
 import {Circle, Group, Line} from "react-konva";
 import useNTValue from "../../../../../hooks/networkTable/useNTValue.ts";
+import React from "react";
 
 export interface NetworkPoseRendererProps {
     lineGroup: NTGroupInfo;

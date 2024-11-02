@@ -2,6 +2,7 @@ import useSelectedPath from "../../../hooks/selectedPath/useSelectedPath.ts";
 import {Box, Modal} from "@mui/material";
 import useSelectPath from "../../../hooks/selectedPath/actions/useSelectPath.ts";
 import SelectedValueChart from "./SelectedValueChart.tsx";
+import React from "react";
 
 export default function SelectedValueModal() {
     const selectedPath = useSelectedPath();

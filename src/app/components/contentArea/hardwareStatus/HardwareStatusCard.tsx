@@ -4,6 +4,7 @@ import HardwareStatusProperty from "./HardwareStatusProperty.tsx";
 import {Bolt, Expand, Explore, Palette, Refresh, Rotate90DegreesCw, Speed, Thermostat} from "@mui/icons-material";
 import HardwareStatusAlert from "./HardwareStatusAlert.tsx";
 import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
+import React from "react";
 
 export interface HardwareStatusCardProps {
     hardwareGroup: NTGroupInfo;
@@ -149,7 +150,7 @@ export default function HardwareStatusCard(props: HardwareStatusCardProps) {
                     text="Currently calibrating..."
                     severity={"info"}
                 />
-                
+
                 <HardwareStatusAlert
                     isInverted
                     path={hardwareGroup.path + "/isConnected"}

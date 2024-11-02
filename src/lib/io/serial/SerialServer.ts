@@ -1,10 +1,10 @@
 import {SerialPort} from "serialport";
-import Logger from "../../common/Logger";
-import Heartbeat from "../../common/Heartbeat";
-import NTValue from "../../types/NTValue";
-import {HEARTBEAT_INTERVAL} from "../../common/Constants";
-import VEXSerialParser from "./VEXSerialParser";
-import BlueBox from "../../BlueBox";
+import Logger from "../../common/Logger.js";
+import Heartbeat from "../../common/Heartbeat.js";
+import NTValue from "../../types/NTValue.js";
+import {HEARTBEAT_INTERVAL} from "../../common/Constants.js";
+import VEXSerialParser from "./VEXSerialParser.js";
+import BlueBox from "../../BlueBox.js";
 
 export default class SerialServer {
 
@@ -60,8 +60,6 @@ export default class SerialServer {
 
     private onData(data: string) {
         try {
-            // Trim the data
-            data = data.trim();
 
             // Update Value
             if (data.startsWith("__NTUPDATE__")) {

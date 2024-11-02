@@ -1,7 +1,7 @@
 import {SerialPort} from "serialport";
-import Logger from "../common/Logger";
-import {PortInfo} from "../serial";
-import BlueBox from "../BlueBox";
+import Logger from "../common/Logger.js";
+import {PortInfo} from "../serial.js";
+import BlueBox from "../BlueBox.js";
 
 const POLL_INTERVAL = 1000;
 
@@ -56,6 +56,6 @@ export default class SerialPortNT {
             clearInterval(this.pollInterval);
 
         // Update all ports every second
-        this.pollInterval = setInterval(this.updateAllPorts, POLL_INTERVAL);
+        this.pollInterval = setInterval(this.updateAllPorts.bind(this), POLL_INTERVAL);
     }
 }

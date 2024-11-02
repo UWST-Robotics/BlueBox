@@ -1,5 +1,6 @@
 import {Alert, AlertColor} from "@mui/material";
 import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
+import React from "react";
 
 export interface HardwareStatusAlertProps {
     path: string;

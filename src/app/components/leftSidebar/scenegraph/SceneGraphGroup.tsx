@@ -66,7 +66,7 @@ export default function SceneGraphGroup(props: SceneGraphGroupProps) {
             )}
 
             <SceneGraphItem
-                depth={depth + 1}
+                depth={depth}
                 name={props.groupInfo.name}
                 path={props.groupInfo.path}
                 value={value}

@@ -1,6 +1,6 @@
-import NTRecord from "../types/NTRecord";
-import NTValue from "../types/NTValue";
-import BlueBox from "../BlueBox";
+import NTRecord from "../types/NTRecord.js";
+import NTValue from "../types/NTValue.js";
+import BlueBox from "../BlueBox.js";
 
 const SERVER_PREFIX = "_server/";
 

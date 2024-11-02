@@ -26,7 +26,7 @@
     "skipLibCheck": false,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "allowArbitraryExtensions": true
+    "allowImportingTsExtensions": true
   },
   "include": [
     "src/app"

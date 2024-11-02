@@ -1,6 +1,7 @@
 import SceneGraph from "./scenegraph/SceneGraph.tsx";
 import StatusHeader from "./status/StatusHeader.tsx";
 import {Paper} from "@mui/material";
+import React from "react";
 
 export default function LeftSidebar() {
     return (

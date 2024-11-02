@@ -18,5 +18,8 @@ export default defineConfig({
     build: {
         outDir: "dist/public",
         emptyOutDir: true
+    },
+    define: {
+        APP_VERSION: JSON.stringify(process.env.npm_package_version)
     }
 })

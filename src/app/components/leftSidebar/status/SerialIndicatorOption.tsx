@@ -2,6 +2,7 @@ import {ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/materia
 import {SettingsEthernet} from "@mui/icons-material";
 import useNTValue from "../../../hooks/networkTable/useNTValue.ts";
 import useSocket from "../../../hooks/socket/useSocket.ts";
+import React from "react";
 
 export interface SerialOptionProps {
     portPath: string;

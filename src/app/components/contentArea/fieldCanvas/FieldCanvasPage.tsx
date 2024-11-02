@@ -1,6 +1,7 @@
 import useCurrentTab from "../../../hooks/navigation/currentTab.ts";
 import {Box} from "@mui/material";
 import FieldCanvas from "./FieldCanvas.tsx";
+import React from "react";
 
 export default function FieldCanvasPage() {
     const [currentTab] = useCurrentTab();

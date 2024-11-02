@@ -1,9 +1,9 @@
 import {Server, Socket} from "socket.io";
-import Logger from "../common/Logger";
-import NTRecord from "../types/NTRecord";
-import * as http from "node:http";
-import BlueBox from "../BlueBox";
-import SerialServer from "./serial/SerialServer";
+import Logger from "../common/Logger.js";
+import NTRecord from "../types/NTRecord.js";
+import * as http from "http";
+import BlueBox from "../BlueBox.js";
+import SerialServer from "./serial/SerialServer.js";
 
 export default class SocketServer {
     io: Server;

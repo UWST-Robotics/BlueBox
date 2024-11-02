@@ -1,6 +1,7 @@
 import {Box, List} from "@mui/material";
 import useNTGroupInfoRoot from "../../../hooks/networkTable/useNTGroupInfoRoot.ts";
 import SceneGraphGroup from "./SceneGraphGroup.tsx";
+import React from "react";
 
 export default function SceneGraph() {
     const rootInfo = useNTGroupInfoRoot();

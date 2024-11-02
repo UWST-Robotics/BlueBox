@@ -1,10 +1,10 @@
-import NetworkTable from "./nt/NetworkTable";
-import WebServer from "./io/WebServer";
-import {DEFAULT_NETWORK_PORT, DEFAULT_SERIAL_PORT} from "./common/Constants";
-import SerialServer from "./io/serial/SerialServer";
-import SocketServer from "./io/SocketServer";
-import SerialPortNT from "./nt/SerialPortNT";
-import ServerNT from "./nt/ServerNT";
+import NetworkTable from "./nt/NetworkTable.js";
+import WebServer from "./io/WebServer.js";
+import {DEFAULT_NETWORK_PORT, DEFAULT_SERIAL_PORT} from "./common/Constants.js";
+import SerialServer from "./io/serial/SerialServer.js";
+import SocketServer from "./io/SocketServer.js";
+import SerialPortNT from "./nt/SerialPortNT.js";
+import ServerNT from "./nt/ServerNT.js";
 
 export default class BlueBox {
     static nt = new NetworkTable();
@@ -17,5 +17,6 @@ export default class BlueBox {
 
     static listen() {
         BlueBox.web.listen();
+        this.serialTable.pollForChanges();
     }
 }

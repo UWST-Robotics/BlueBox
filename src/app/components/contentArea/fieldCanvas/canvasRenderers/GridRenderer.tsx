@@ -1,5 +1,5 @@
 import {Group, Line} from "react-konva";
-
+import React from "react";
 
 export interface GridRendererProps {
     canvasSize: number;
@@ -25,7 +25,7 @@ export default function GridRenderer(props: GridRendererProps) {
         <Group
             listening={false}
         >
-            
+
             {/* Horizontal lines */}
             {[...Array(gridSize)].map((_, i) => (
                 <Line
