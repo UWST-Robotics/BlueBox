@@ -1,5 +1,4 @@
 import {SerialPort} from "serialport";
-import Logger from "../common/Logger.js";
 import {PortInfo} from "../serial.js";
 import BlueBox from "../BlueBox.js";
 
@@ -8,6 +7,10 @@ const POLL_INTERVAL = 1000;
 export default class SerialPortNT {
     pollInterval?: NodeJS.Timeout;
     lastPorts: PortInfo[] = [];
+
+    private static getPortNTPath(port: PortInfo) {
+        return `serialPorts/${port.path.replaceAll("/", "_")}`;
+    }
 
     /**
      * Update the list of available ports over Network Tables
@@ -32,22 +35,22 @@ export default class SerialPortNT {
     }
 
     updatePort(port: PortInfo) {
-        Logger.info(`Added port: ${port.path}`);
         const currentPort = BlueBox.serial.hardware.path;
+        const ntPath = SerialPortNT.getPortNTPath(port);
 
-        BlueBox.serverTable.updateRecord(`serialPorts/${port.path}/isActive`, port.path === currentPort);
-        BlueBox.serverTable.updateRecord(`serialPorts/${port.path}/path`, port.path);
-        BlueBox.serverTable.updateRecord(`serialPorts/${port.path}/manufacturer`, port.manufacturer);
-        BlueBox.serverTable.updateRecord(`serialPorts/${port.path}/serialNumber`, port.serialNumber);
-        BlueBox.serverTable.updateRecord(`serialPorts/${port.path}/pnpID`, port.pnpId);
-        BlueBox.serverTable.updateRecord(`serialPorts/${port.path}/locationID`, port.locationId);
-        BlueBox.serverTable.updateRecord(`serialPorts/${port.path}/productID`, port.productId);
-        BlueBox.serverTable.updateRecord(`serialPorts/${port.path}/vendorID`, port.vendorId);
+        BlueBox.serverTable.updateRecord(ntPath + "/isActive", port.path === currentPort);
+        BlueBox.serverTable.updateRecord(ntPath + "/path", port.path);
+        BlueBox.serverTable.updateRecord(ntPath + "/manufacturer", port.manufacturer);
+        BlueBox.serverTable.updateRecord(ntPath + "/serialNumber", port.serialNumber);
+        BlueBox.serverTable.updateRecord(ntPath + "/pnpID", port.pnpId);
+        BlueBox.serverTable.updateRecord(ntPath + "/locationID", port.locationId);
+        BlueBox.serverTable.updateRecord(ntPath + "/productID", port.productId);
+        BlueBox.serverTable.updateRecord(ntPath + "/vendorID", port.vendorId);
     }
 
     onRemovePort(port: PortInfo) {
-        Logger.info(`Removed port: ${port.path}`);
-        BlueBox.serverTable.removeRecordsInGroup(`serialPorts/${port.path}`);
+        const ntPath = SerialPortNT.getPortNTPath(port);
+        BlueBox.serverTable.removeRecordsInGroup(ntPath);
     }
 
     pollForChanges() {

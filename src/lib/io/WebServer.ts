@@ -2,7 +2,6 @@ import express from 'express';
 import Logger from "../common/Logger.js";
 import * as http from "http";
 import {DEFAULT_NETWORK_PORT} from "../common/Constants.js";
-import path from "path";
 
 export default class WebServer {
     port: number | string;
@@ -13,7 +12,7 @@ export default class WebServer {
         this.port = port || DEFAULT_NETWORK_PORT;
 
         // Public Folder
-        this.app.use(express.static(path.join(__dirname, "public")));
+        this.app.use(express.static("public"));
     }
 
     listen() {
