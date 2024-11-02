@@ -23,8 +23,8 @@ export default function StatusHeader() {
         >
             <StatusBanner
                 type={"Socket"}
-                text={socketStatus ? "Connected" : "Disconnected"}
-                color={socketStatus ? "green" : "red"}
+                text={socketStatus === "connected" ? "Connected" : "Disconnected"}
+                color={socketStatus === "connected" ? "green" : "red"}
             />
 
             {socketStatus === "connected" && (

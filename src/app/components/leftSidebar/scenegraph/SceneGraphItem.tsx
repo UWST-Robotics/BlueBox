@@ -1,4 +1,4 @@
-import {ListItemButton, ListItemText} from "@mui/material";
+import {Box, ListItemButton, Typography} from "@mui/material";
 import ColoredListItem from "../../common/ColoredListItem.tsx";
 import NTValue from "../../../types/nt/NTValue.ts";
 import networkValueToString from "../../../utils/networkValueToString.ts";
@@ -25,12 +25,6 @@ export default function SceneGraphItem(props: SceneGraphItemProps) {
         <ColoredListItem
             intent="success"
             disablePadding
-
-            secondaryAction={(
-                <ListItemText
-                    secondary={valueText}
-                />
-            )}
         >
             <ListItemButton
                 onClick={() => enableValueOverTime(path)}
@@ -41,9 +35,26 @@ export default function SceneGraphItem(props: SceneGraphItemProps) {
                     paddingLeft: depth * 2
                 }}
             >
-                <ListItemText
-                    primary={name}
-                />
+                <Box
+                    sx={{}}
+                >
+                    <Typography>
+                        {name}
+                    </Typography>
+                    <Typography
+                        sx={{
+                            color: "text.secondary",
+                            fontSize: 12,
+                            marginRight: 1,
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            maxWidth: 100
+                        }}
+                    >
+                        {valueText}
+                    </Typography>
+                </Box>
             </ListItemButton>
         </ColoredListItem>
     )

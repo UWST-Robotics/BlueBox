@@ -1,14 +1,14 @@
 import NTRecord from "../types/NTRecord";
 
 export default class NetworkTable {
-    static records: NTRecord[] = [];
+    records: NTRecord[] = [];
 
     /**
      * Add or update a record in the NetworkTable
      * @param record - The record to add or update
      * @returns The record that was added or updated
      */
-    static addOrUpdate(record: NTRecord) {
+    addOrUpdate(record: NTRecord) {
         const existingRecord = this.records.find((r) => r.key === record.key);
         if (existingRecord) {
             existingRecord.value = record.value;
@@ -22,7 +22,7 @@ export default class NetworkTable {
      * Get a record by key
      * @param key The key of the record
      */
-    static getRecord(key: string) {
+    getRecord(key: string) {
         return this.records.find((record) => record.key === key);
     }
 }

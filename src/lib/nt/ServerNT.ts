@@ -1,7 +1,6 @@
 import NTRecord from "../types/NTRecord";
-import NetworkTable from "./NetworkTable";
-import SocketCommunication from "../io/SocketCommunication";
 import NTValue from "../types/NTValue";
+import BlueBox from "../BlueBox";
 
 const SERVER_PREFIX = "_server/";
 
@@ -10,17 +9,14 @@ export default class ServerNT {
     /**
      * Remove all records in a group
      * @param keyPrefix - The prefix of the keys to remove
-     * @param excludeKeys - Keys to exclude from removal
      */
-    static removeRecordsInGroup(keyPrefix: string, excludeKeys?: string[]) {
+    removeRecordsInGroup(keyPrefix: string) {
         const allRecords = this.getAllRecords(keyPrefix);
         allRecords.forEach((record) => {
-            const shouldExclude = excludeKeys && excludeKeys.some((key) => record.key.startsWith(SERVER_PREFIX + key));
-            if (!shouldExclude) {
-                record.value = null;
-                NetworkTable.addOrUpdate(record);
-                SocketCommunication.emitUpdateRecord(record);
-            }
+            this.updateAndEmitRecord({
+                key: record.key,
+                value: null
+            });
         });
     }
 
@@ -28,10 +24,10 @@ export default class ServerNT {
      * Update and emit a record
      * @param record
      */
-    private static updateAndEmitRecord(record: NTRecord) {
+    private updateAndEmitRecord(record: NTRecord) {
         // Update the record in the NetworkTable
-        NetworkTable.addOrUpdate(record);
-        SocketCommunication.emitUpdateRecord(record);
+        BlueBox.nt.addOrUpdate(record);
+        BlueBox.socket.emitUpdateRecord(record);
     }
 
     /**
@@ -40,7 +36,7 @@ export default class ServerNT {
      * @param key - The key of the record
      * @param value - The value of the record
      */
-    static updateRecord(key: string, value: NTValue) {
+    updateRecord(key: string, value: NTValue) {
         const record = {
             key: SERVER_PREFIX + key,
             value
@@ -52,7 +48,7 @@ export default class ServerNT {
      * Gets all records that start with a certain key
      * @param key - The key to search for
      */
-    static getAllRecords(key?: string) {
-        return NetworkTable.records.filter((record) => record.key.startsWith(SERVER_PREFIX + key));
+    getAllRecords(key?: string) {
+        return BlueBox.nt.records.filter((record) => record.key.startsWith(SERVER_PREFIX + key));
     }
 }

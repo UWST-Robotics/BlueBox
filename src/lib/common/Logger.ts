@@ -1,5 +1,5 @@
 import Chalk from "chalk";
-import SocketCommunication from "../io/SocketCommunication";
+import BlueBox from "../BlueBox";
 
 export default class Logger {
     static log(prefix: string, data: string) {
@@ -8,7 +8,7 @@ export default class Logger {
 
     static tryEmitLog(prefix: string, data: string) {
         try {
-            SocketCommunication.emitLog(`${prefix} ${data}`);
+            BlueBox.socket.emitLog(`${prefix} ${data}`);
         } catch {
             // Ignore
         }

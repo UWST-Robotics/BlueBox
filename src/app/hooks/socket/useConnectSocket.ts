@@ -13,20 +13,25 @@ export default function useSocketConnection() {
 
     React.useEffect(() => {
         socket.on("connect", () => {
-            console.log("Connected to server");
+            console.log("Connected to socket");
             primaryStore.set(socketStatusAtom, "connected");
 
-            // Request all records from the server
+            // Request all records from the lib
             socket.emit("getAllRecords");
         });
 
+        socket.on("connect_error", (error: Error) => {
+            console.error("Failed to connect to socket", error);
+            primaryStore.set(socketStatusAtom, "disconnected");
+        });
+
         socket.on("disconnect", () => {
-            console.log("Disconnected from server");
+            console.log("Disconnected from lib");
             primaryStore.set(socketStatusAtom, "disconnected");
         });
 
         socket.on("setAllRecords", (records: NetworkTableRecord[]) => {
-            console.log("Received all records from server");
+            console.log("Received all records from lib");
             records.forEach((record) => {
                 primaryStore.set(updateNTValueAtomFamily(record.key), record.value);
             });
@@ -47,7 +52,7 @@ export default function useSocketConnection() {
         });
 
         socket.on("serialPorts", (ports: SerialPortInfo[]) => {
-            console.log("Received serial ports from server");
+            console.log("Received serial ports from lib");
             // TODO: Fix Serial Port Selection
             primaryStore.set(serialPortsAtom, ports);
         });
